@@ -17,11 +17,11 @@ export const THOMAS_PROMPT = getCharacterPrompt('thomas');
 
 export const INITIAL_POSITIONS = {
     jamie: {
-        opinion: "The most significant change was about making the game faster and more aggressive for players who liked battle simulations.",
+        opinion: "The drought affected crops like wheat, canola, and barley. People at the ranch faced barren pastures and sold off cattle, and turned to irrigation but due to scarce water supplies it became too expensive.",
         status: "RED"
     },
     thomas: {
-        opinion: "The most significant change was the introduction of standardized rules across Europe to allow for international play.",
+        opinion: "The drought affected forests by making trees dry and unhealthy, which caused problems for animals living there. It impacted non-farming communities because some people had to change their routines and deal with environmental challenges. Overall, the drought made life harder outside of farming areas as nature was damaged.",
         status: "RED"
     }
 };

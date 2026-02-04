@@ -1,8 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Send } from 'lucide-react';
 
 const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentState }) => {
   const scrollRef = useRef(null);
+  const [stancePreview, setStancePreview] = useState(null); // 'jamie' | 'thomas' | null — click avatar to reveal
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -29,22 +30,46 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentSta
   return (
     <div className="flex flex-col flex-1 bg-white min-h-0">
       {/* Chat Header */}
-      <div className="p-5 border-b border-gray-100 flex items-center space-x-4">
-        <div className="flex -space-x-4">
-          <div className={`w-14 h-14 rounded-full border-4 ${getStatusStyles('jamie')} overflow-hidden bg-orange-100 z-10 transition-all duration-500`}>
-            <img src="/assets/jamie_beaver.png" alt="Jamie" className="w-full h-full object-cover" />
+      <div className="p-5 border-b border-gray-100">
+        <div className="flex items-center space-x-4">
+          <div className="flex -space-x-4">
+            <button
+              type="button"
+              onClick={() => setStancePreview(prev => (prev === 'jamie' ? null : 'jamie'))}
+              className="rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+              title="Click to view current stance (reference)"
+            >
+              <div className={`w-14 h-14 rounded-full border-4 ${getStatusStyles('jamie')} overflow-hidden bg-orange-100 z-10 transition-all duration-500 cursor-pointer hover:opacity-90`}>
+                <img src="/assets/jamie_beaver.png" alt="Jamie" className="w-full h-full object-cover" />
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setStancePreview(prev => (prev === 'thomas' ? null : 'thomas'))}
+              className="rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+              title="Click to view current stance (reference)"
+            >
+              <div className={`w-14 h-14 rounded-full border-4 ${getStatusStyles('thomas')} overflow-hidden bg-blue-100 transition-all duration-500 cursor-pointer hover:opacity-90`}>
+                <img src="/assets/thomas_goose.png" alt="Thomas" className="w-full h-full object-cover" />
+              </div>
+            </button>
           </div>
-          <div className={`w-14 h-14 rounded-full border-4 ${getStatusStyles('thomas')} overflow-hidden bg-blue-100 transition-all duration-500`}>
-            <img src="/assets/thomas_goose.png" alt="Thomas" className="w-full h-full object-cover" />
+          <div>
+            <h2 className="font-bold text-gray-900 text-base leading-tight">Thomas & Jamie</h2>
+            <div className="flex items-center mt-0.5">
+              <div className="w-2 h-2 rounded-full bg-green-500 mr-1.5"></div>
+              <span className="text-xs text-gray-500 font-medium">Active</span>
+            </div>
           </div>
         </div>
-        <div>
-          <h2 className="font-bold text-gray-900 text-base leading-tight">Thomas & Jamie</h2>
-          <div className="flex items-center mt-0.5">
-            <div className="w-2 h-2 rounded-full bg-green-500 mr-1.5"></div>
-            <span className="text-xs text-gray-500 font-medium">Active</span>
+        {/* Reference: current stance (hidden until avatar clicked) */}
+        {stancePreview && agentState?.[stancePreview] && (
+          <div className="mt-3 p-3 rounded-lg bg-gray-50 border border-gray-200 text-left">
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Reference — {stancePreview === 'jamie' ? 'Jamie' : 'Thomas'}&apos;s current stance</span>
+            <p className="text-xs text-gray-700 mt-1 leading-relaxed">{agentState[stancePreview].opinion}</p>
+            <p className="text-[10px] text-gray-400 mt-1.5">Status: {agentState[stancePreview].status}</p>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Messages area */}

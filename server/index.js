@@ -11,8 +11,8 @@ import { DISCUSSION_ORCHESTRATOR_PROMPT } from './agents/discussionOrchestrator.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Video Transcript Context
-const TRANSCRIPT = fs.readFileSync(path.join(__dirname, '..', 'content', 'CHESS_HISTORY.md'), 'utf8');
+// Reading content (source of truth for evaluation)
+const TRANSCRIPT = fs.readFileSync(path.join(__dirname, '..', 'content', 'DROUGHT_READING.md'), 'utf8');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -97,34 +97,12 @@ app.post('/api/check-answer', async (req, res) => {
     }
 
     try {
-        const prompt = `You are an automated learning assistant providing professional feedback on a student's reflection.
-        
-        SOURCE CONTENT (from the video):
-        "${TRANSCRIPT}"
-        
-        DISCUSSION QUESTION: 
-        "What was the single most significant rule change in 15th-century Europe that created modern chess, and why was this change made?"
-        
-        STUDENT'S CURRENT ANSWER: 
-        "${answer}"
-        
-        YOUR TASK:
-        1. Analyze the answer against the video content for accuracy and completeness. 
-        2. CORE CONCEPTS TO CHECK:
-           - Concept A: The "advisor" piece was transformed into the "queen".
-           - Concept B: The change was inspired by the rise of "powerful female leaders" (like Isabella of Castile).
-        3. JUDGMENT CRITERIA:
-           - If the student mentions BOTH the piece transformation (advisor -> queen) and the historical reason (female leaders), mark as isCorrect: true.
-           - BE LENIENT with grammar or if they accidentally flip the direction (e.g., saying "queen turned into advisor") as long as they identified the two key entities and the reason.
-           - If they mention the piece but not the reason (or vice versa), mark as isCorrect: false and provide a hint.
-        4. Generate professional, hint-based feedback.
-        
-        Respond with ONLY a JSON object: 
-        {
-            "isCorrect": true/false, 
-            "feedbackTitle": "A professional heading",
-            "feedbackDesc": "A professional, concise evaluation. If incorrect, provide a hint without giving the full answer away unless they are very close."
-        }`;
+        const prompt = `Feedback on a student reflection. Source: "${TRANSCRIPT}"
+Question: "How did the drought affect forests and non-farming communities across Canada?"
+Model themes: wildfires (tinder-dry, scale), impact on towns/rural/First Nations; air quality + health risks; Eastern Newfoundland, bans/evacuations.
+Student answer: "${answer}"
+If they address 5+ of these themes (forests e.g. wildfires, scale, impact on communities, air quality, health, Newfoundland, evacuations/bans), isCorrect: true. Below 5 themes = isCorrect: false. Be lenient on wording but count themes clearly present.
+Respond ONLY with valid JSON: {"isCorrect": true or false, "feedbackTitle": "string", "feedbackDesc": "string (if wrong give hint not answer)"}`;
 
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
@@ -136,12 +114,12 @@ app.post('/api/check-answer', async (req, res) => {
     } catch (error) {
         console.error('Error checking answer with Gemini:', error);
         // Fallback: if it contains keywords from the transcript, count as correct
-        const keywords = ['gupta', 'chaturanga', 'persia', 'shah', 'social class', 'queen', 'advisor', 'female', 'leader'];
+        const keywords = ['wildfire', 'forest', 'air quality', 'evacuat', 'health', '6.5 million', 'newfoundland', 'non-farming', 'communities'];
         const isCorrect = keywords.some(k => answer.toLowerCase().includes(k));
         res.json({ 
             isCorrect: isCorrect, 
             feedbackTitle: isCorrect ? "Analysis Complete" : "Incomplete Reflection",
-            feedbackDesc: isCorrect ? "The reflection identifies key components from the lecture. Further detail could be added regarding the 15th-century transformation." : "The current response does not fully address the piece transformation and its historical context as described in the video. Please review the lecture for specific details on the advisor's role and the political surge at the time."
+            feedbackDesc: isCorrect ? "The reflection identifies key effects from the reading on forests and non-farming communities." : "The current response does not fully address how the drought affected forests and non-farming communities as described in the reading. Review the passage for evidence on wildfires, air quality, health risks, and impacts on communities (e.g. evacuations)."
         }); 
     }
 });

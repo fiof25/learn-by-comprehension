@@ -44,7 +44,7 @@ const QuestionSection = ({ onBack, agentState }) => {
       console.error('Error checking answer:', error);
       setApiFeedback({
         title: 'Good effort!',
-        desc: "I'm having trouble connecting to the review service, but let's keep discussing! Did you mention Chaturanga or the evolution of the pieces?"
+        desc: "I'm having trouble connecting to the review service, but let's keep discussing! Did you mention wildfires, air quality, or effects on non-farming communities?"
       });
       setShowFeedback('correct');
     } finally {
@@ -62,31 +62,31 @@ const QuestionSection = ({ onBack, agentState }) => {
                 <div className="w-1/2 h-full bg-[#22c55e] rounded-full"></div>
             </div>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 leading-tight">Reflecting on the History of Chess</h1>
-        <p className="text-xs text-gray-400 mt-1 font-medium">Think about how chess evolved from a battle simulation to a modern game.</p>
+        <h1 className="text-2xl font-bold text-gray-900 leading-tight">Reflecting on the Drought Reading</h1>
+        <p className="text-xs text-gray-400 mt-1 font-medium">Use evidence from the reading about forests and non-farming communities.</p>
       </div>
 
       {/* Content Area */}
       <div className="flex-1 px-8 py-6 overflow-y-auto flex flex-col items-center">
         <div className="w-full max-w-3xl bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
            <div className="h-48 w-full overflow-hidden relative">
-             <img 
-              src="/assets/chess_bg_new.png" 
-              alt="Chess History" 
-              className="w-full h-full object-cover"
+             <img
+               src="/assets/drought_banner.png"
+               alt="Drought landscape"
+               className="w-full h-full object-cover"
              />
            </div>
            <div className="p-6">
-             <h2 className="text-lg font-bold text-gray-900 mb-3 leading-tight">What was the single most significant rule change in 15th-century Europe that created modern chess, and why was this change made?</h2>
+             <h2 className="text-lg font-bold text-gray-900 mb-3 leading-tight">How did the drought affect forests and non-farming communities across Canada?</h2>
              <p className="text-gray-500 text-sm leading-relaxed mb-6">
-               Think about the piece that was recast and what cultural shift might have inspired its new, more powerful role.
+               Support your answer with specific evidence from the reading.
              </p>
 
              <div className="relative">
                <textarea 
                  value={answer}
                  onChange={(e) => setAnswer(e.target.value)}
-                 placeholder="Share your thoughts on the global evolution of chess..."
+                 placeholder="Share your answer with evidence from the reading..."
                  rows={4}
                  className="w-full p-4 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 outline-none transition-all text-sm text-gray-600 resize-none"
                />
