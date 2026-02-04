@@ -1,0 +1,22 @@
+# IDEs
+.cursor/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+env/
+.env
+*.pyc
+
+# Logs
+*.log
+
+# Build outputs
+dist/
+build/
+out/
