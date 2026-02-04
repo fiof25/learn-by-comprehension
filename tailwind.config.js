@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        'platform-blue': '#2563eb', // Example blue from screenshots
+        'platform-blue': '#2563eb', // Example blue from screenshots PLS WORKKKKK
         'platform-gray': '#f3f4f6',
       }
     },
