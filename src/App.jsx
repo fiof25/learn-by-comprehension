@@ -120,10 +120,10 @@ function App() {
     return <HomePage onStartLearning={() => setActiveStep('loading')} />;
   }
   if (activeStep === 'loading') {
-    return <LoadingScreen />;
+    return <LoadingScreen onGoHome={() => setActiveStep('home')} />;
   }
   if (activeStep === 'questionSelect') {
-    return <QuestionSelectionView onQuestionSelect={() => setActiveStep('reading')} />;
+    return <QuestionSelectionView onQuestionSelect={() => setActiveStep('reading')} onGoHome={() => setActiveStep('home')} />;
   }
 
   const StarIcon = () => (
@@ -139,7 +139,7 @@ function App() {
     <div className="h-screen bg-[#f6f6f6] flex flex-col overflow-hidden">
       {/* Navbar */}
       <header className="bg-[#1a1a1a] h-[52px] flex items-center justify-between px-8 shrink-0">
-        <div className="flex items-center gap-1 px-3">
+        <div className="flex items-center gap-1 px-3 cursor-pointer" onClick={() => setActiveStep('home')}>
           <StarIcon />
           <span className="text-white text-lg font-bold font-karla">Curiosity</span>
         </div>
@@ -167,7 +167,7 @@ function App() {
         {/* Main Workspace - Reading, or Question + optional PDF reference */}
         <main className="flex-1 flex flex-col relative overflow-hidden bg-white rounded">
           {activeStep === 'reading' ? (
-            <ReadingViewer onComplete={() => setActiveStep('question')} />
+            <ReadingViewer onComplete={() => setActiveStep('question')} onBack={() => setActiveStep('questionSelect')} />
           ) : (
             <>
               <div className="flex-1 flex flex-col min-h-0 overflow-hidden">

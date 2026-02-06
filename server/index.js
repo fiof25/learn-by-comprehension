@@ -44,7 +44,7 @@ app.post('/api/chat', async (req, res) => {
         }).join('\n');
 
         const fullPrompt = DISCUSSION_ORCHESTRATOR_PROMPT
-            .replace('{{TRANSCRIPT}}', TRANSCRIPT)
+            .replace('{{TRANSCRIPT}}', '[TRANSCRIPT OMITTED FOR SPEED - use your knowledge of the drought reading themes]')
             .replace('{{JAMIE_PROFILE}}', JAMIE_PROMPT)
             .replace('{{THOMAS_GOOSE_PROFILE}}', THOMAS_PROMPT)
             .replace('{{AGENT_STATE}}', JSON.stringify(agentState || INITIAL_POSITIONS))
@@ -97,7 +97,7 @@ app.post('/api/check-answer', async (req, res) => {
     }
 
     try {
-        const prompt = `Feedback on a student reflection. Source: "${TRANSCRIPT}"
+        const prompt = `Feedback on a student reflection. Source: "[TRANSCRIPT OMITTED FOR SPEED]"
 Question: "How did the drought affect forests and non-farming communities across Canada?"
 Model themes: wildfires (tinder-dry, scale), impact on towns/rural/First Nations; air quality + health risks; Eastern Newfoundland, bans/evacuations.
 Important: The correct figure for hectares burned is 6.5 million (not 6.8 million). When evaluating "scale", accept answers that mention the scale of wildfires; if the student gives a number, 6.5 million hectares is correct—if they say 6.8 million or another wrong number, still count scale as present but in feedbackDesc you may gently correct to 6.5 million.

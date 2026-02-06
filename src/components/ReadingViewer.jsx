@@ -1,6 +1,7 @@
 import React from 'react';
+import { ArrowLeft } from 'lucide-react';
 
-const ReadingViewer = ({ onComplete }) => {
+const ReadingViewer = ({ onComplete, onBack }) => {
   return (
     <div className="flex flex-col h-full bg-white overflow-hidden">
       {/* Header */}
@@ -19,7 +20,14 @@ const ReadingViewer = ({ onComplete }) => {
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="px-8 py-3 flex justify-end items-center">
+      <div className="px-8 py-3 flex justify-between items-center">
+        <button
+          onClick={onBack}
+          className="px-6 py-2.5 border border-gray-200 text-gray-600 text-sm font-bold rounded-lg hover:bg-gray-50 transition-all flex items-center"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to questions
+        </button>
         <button
           onClick={onComplete}
           className="px-8 py-3 bg-[#16a34a] text-white text-sm font-bold rounded-lg hover:bg-[#15803d] transition-all flex items-center shadow-sm"

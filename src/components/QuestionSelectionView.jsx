@@ -23,12 +23,12 @@ const questions = [
   },
 ];
 
-const QuestionSelectionView = ({ onQuestionSelect }) => {
+const QuestionSelectionView = ({ onQuestionSelect, onGoHome }) => {
   return (
     <div className="min-h-screen bg-[#f6f6f6] flex flex-col">
       {/* Navbar */}
       <header className="bg-[#1a1a1a] h-[52px] flex items-center justify-between px-8">
-        <div className="flex items-center gap-1 px-3">
+        <div className="flex items-center gap-1 px-3 cursor-pointer" onClick={onGoHome}>
           <StarIcon />
           <span className="text-white text-lg font-bold font-karla">Curiosity</span>
         </div>
