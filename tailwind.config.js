@@ -7,8 +7,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        'platform-blue': '#2563eb', // Example blue from screenshots PLS WORKKKKK
+        'platform-blue': '#2563eb',
         'platform-gray': '#f3f4f6',
+      },
+      fontFamily: {
+        'karla': ['Karla', 'sans-serif'],
+        'mulish': ['Mulish', 'sans-serif'],
       }
     },
   },

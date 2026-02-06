@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Sidebar from './components/Sidebar';
 import Chat from './components/Chat';
 import ReadingViewer from './components/ReadingViewer';
 import QuestionSection from './components/QuestionSection';
+import HomePage from './components/HomePage';
+import LoadingScreen from './components/LoadingScreen';
+import QuestionSelectionView from './components/QuestionSelectionView';
 
 function App() {
-  const [activeStep, setActiveStep] = useState('reading'); // 'reading' or 'question'
+  const [activeStep, setActiveStep] = useState('home'); // 'home' | 'loading' | 'questionSelect' | 'reading' | 'question'
   const [showPdfReference, setShowPdfReference] = useState(false); // when on question step, toggle main area to PDF
   const [messages, setMessages] = useState([]);
   const [isJamieTyping, setIsJamieTyping] = useState(false);
@@ -105,18 +107,55 @@ function App() {
     }
   };
 
+  // Auto-transition from loading to question selection
+  useEffect(() => {
+    if (activeStep === 'loading') {
+      const timer = setTimeout(() => setActiveStep('questionSelect'), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [activeStep]);
+
+  // Full-page screens before the learning experience
+  if (activeStep === 'home') {
+    return <HomePage onStartLearning={() => setActiveStep('loading')} />;
+  }
+  if (activeStep === 'loading') {
+    return <LoadingScreen />;
+  }
+  if (activeStep === 'questionSelect') {
+    return <QuestionSelectionView onQuestionSelect={() => setActiveStep('reading')} />;
+  }
+
+  const StarIcon = () => (
+    <svg viewBox="0 0 32 32" className="w-6 h-5">
+      <path
+        d="M16 2L19.09 11.26L29 11.44L21.18 17.14L24.09 26.56L16 21.12L7.91 26.56L10.82 17.14L3 11.44L12.91 11.26L16 2Z"
+        fill="#FDB022"
+      />
+    </svg>
+  );
+
   return (
-    <div className="flex h-screen bg-[#f3f4f6] overflow-hidden">
-      {/* Sidebar - Fix to left */}
-      <Sidebar />
+    <div className="h-screen bg-[#f6f6f6] flex flex-col overflow-hidden">
+      {/* Navbar */}
+      <header className="bg-[#1a1a1a] h-[52px] flex items-center justify-between px-8 shrink-0">
+        <div className="flex items-center gap-1 px-3">
+          <StarIcon />
+          <span className="text-white text-lg font-bold font-karla">Curiosity</span>
+        </div>
+        <div className="flex items-center gap-5 text-white text-sm font-mulish">
+          <span className="cursor-pointer">Login</span>
+          <span className="cursor-pointer">Signup</span>
+        </div>
+      </header>
 
       {/* Main Content Area */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 gap-6 p-6 overflow-hidden" style={{ height: 'calc(100vh - 52px)' }}>
         {/* Chat - Only show when on 'question' step */}
         {activeStep === 'question' && (
-          <div className="w-96 border-r border-gray-200 bg-white flex flex-col flex-shrink-0 h-full overflow-hidden animate-in slide-in-from-left duration-300">
-            <Chat 
-              messages={messages} 
+          <div className="w-96 bg-white rounded flex flex-col flex-shrink-0 h-full overflow-hidden">
+            <Chat
+              messages={messages}
               onSendMessage={handleSendMessage}
               isJamieTyping={isJamieTyping}
               isThomasTyping={isThomasTyping}
@@ -126,7 +165,7 @@ function App() {
         )}
 
         {/* Main Workspace - Reading, or Question + optional PDF reference */}
-        <main className="flex-1 flex flex-col relative overflow-hidden bg-white">
+        <main className="flex-1 flex flex-col relative overflow-hidden bg-white rounded">
           {activeStep === 'reading' ? (
             <ReadingViewer onComplete={() => setActiveStep('question')} />
           ) : (

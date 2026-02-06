@@ -71,7 +71,7 @@ const QuestionSection = ({ onBack, agentState }) => {
         <div className="w-full max-w-3xl bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
            <div className="h-48 w-full overflow-hidden relative">
              <img
-               src="/assets/drought_banner.png"
+               src="/assets/drought_banner_long.png"
                alt="Drought landscape"
                className="w-full h-full object-cover"
              />

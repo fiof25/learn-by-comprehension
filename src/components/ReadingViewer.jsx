@@ -1,38 +1,25 @@
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
 
 const ReadingViewer = ({ onComplete }) => {
   return (
     <div className="flex flex-col h-full bg-white overflow-hidden">
       {/* Header */}
-      <div className="px-8 py-4">
-        <button className="flex items-center text-[10px] font-bold text-gray-400 hover:text-gray-800 mb-2 transition-colors group uppercase tracking-widest">
-          <ArrowLeft className="w-3 h-3 mr-1 group-hover:-translate-x-0.5 transition-transform" />
-          Back to student list
-        </button>
-        <h1 className="text-xl font-bold text-gray-900 leading-tight">Read and discuss the contents of this reading</h1>
-        <p className="text-[11px] text-gray-400 mt-1 font-medium">Press continue when you are finished reading</p>
+      <div className="px-8 pt-6 pb-2">
+        <h1 className="text-2xl font-bold text-gray-900 leading-tight">Read and discuss the contents of this reading</h1>
+        <p className="text-sm text-gray-400 mt-1 font-medium">Press continue when you are finished reading</p>
       </div>
 
-      {/* PDF Content Area */}
-      <div className="flex-1 flex flex-col items-center justify-start px-8 pb-4 min-h-0">
-        <div className="w-full max-w-[900px] bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col border border-gray-100 min-h-0 flex-1">
-          <div className="bg-[#1e40af] px-6 py-3 text-white">
-            <h2 className="text-base font-bold">Drought Reading</h2>
-            <p className="text-[10px] opacity-70 font-medium">Source: Reading package</p>
-          </div>
-          <div className="flex-1 min-h-0 p-4 flex flex-col">
-            <iframe
-              src="/assets/Drought_Reading.pdf"
-              title="Drought Reading"
-              className="w-full flex-1 min-h-[500px] rounded-lg border border-gray-100 bg-gray-50"
-            />
-          </div>
-        </div>
+      {/* PDF centered */}
+      <div className="flex-1 flex items-center justify-center min-h-0 px-8 py-4">
+        <iframe
+          src="/assets/Drought_Reading.pdf"
+          title="Drought Reading"
+          className="w-full max-w-[700px] h-full rounded-lg border border-gray-100 bg-gray-50"
+        />
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="px-8 py-4 flex justify-end items-center border-t border-gray-50 bg-white">
+      <div className="px-8 py-3 flex justify-end items-center">
         <button
           onClick={onComplete}
           className="px-8 py-3 bg-[#16a34a] text-white text-sm font-bold rounded-lg hover:bg-[#15803d] transition-all flex items-center shadow-sm"
