@@ -61,7 +61,16 @@ const QuestionSelectionView = ({ onQuestionSelect }) => {
 
           <div className="flex flex-col gap-4">
             {questions.map((q) => (
-              <div key={q.id} className="border border-black/15 rounded p-4 flex items-end justify-between gap-6">
+              <div
+                key={q.id}
+                className="border border-black/15 rounded p-4 flex items-end justify-between gap-6"
+                style={q.id === 1 ? {
+                  backgroundImage: 'url(/assets/q1card.png)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'right bottom',
+                  backgroundRepeat: 'no-repeat',
+                } : undefined}
+              >
                 <div className="flex flex-col gap-3 flex-1 min-w-0">
                   <p className="text-xl font-medium font-karla text-black leading-tight">
                     {q.text}
@@ -69,16 +78,12 @@ const QuestionSelectionView = ({ onQuestionSelect }) => {
                   <span className="border border-[#0c8e3f] text-[#0c8e3f] text-sm font-mulish px-3 py-0.5 rounded w-fit">
                     {q.tag}
                   </span>
-                  <div className="flex items-center gap-2">
-                    <img src="/assets/jamie_beaver.png" alt="Jamie" className="w-10 h-10 rounded-full object-cover" />
-                    <img src="/assets/thomas_goose.png" alt="Thomas" className="w-10 h-10 rounded-full object-cover border-2 border-white -ml-4" />
-                    <span className="text-base font-mulish text-black/70 ml-1">Asked by {q.askedBy}</span>
-                  </div>
+                  <span className="text-base font-mulish text-black/70">Asked by {q.askedBy}</span>
                 </div>
 
                 <button
                   onClick={() => q.id === 1 && onQuestionSelect(q.id)}
-                  className={`${q.id === 1 ? 'bg-[#0c8e3f] hover:bg-[#0a7534] cursor-pointer' : 'bg-[#0c8e3f]/50 cursor-default'} transition-colors text-white px-4 py-2 rounded flex items-center gap-3 whitespace-nowrap shrink-0`}
+                  className={`${q.id === 1 ? 'bg-[#0c8e3f] hover:bg-[#0a7534] cursor-pointer' : 'bg-[#0c8e3f]/50 cursor-default'} transition-colors text-white px-4 py-2 rounded flex items-center gap-3 whitespace-nowrap shrink-0 self-center`}
                 >
                   <span className="text-sm font-mulish">Start learning</span>
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

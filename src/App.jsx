@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Pencil, FileText, BookOpen } from 'lucide-react';
 import Chat from './components/Chat';
 import ReadingViewer from './components/ReadingViewer';
 import QuestionSection from './components/QuestionSection';
@@ -18,7 +18,7 @@ const StarIcon = () => (
 
 function App() {
   const [activeStep, setActiveStep] = useState('home'); // 'home' | 'loading' | 'questionSelect' | 'reading' | 'question'
-  const [showPdfReference, setShowPdfReference] = useState(false); // when on question step, toggle main area to PDF
+  const [showFinishModal, setShowFinishModal] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isJamieTyping, setIsJamieTyping] = useState(false);
   const [isThomasTyping, setIsThomasTyping] = useState(false);
@@ -132,64 +132,113 @@ function App() {
       return <LoadingScreen />;
     }
     if (activeStep === 'questionSelect') {
-      return <QuestionSelectionView onQuestionSelect={() => setActiveStep('reading')} />;
+      return <QuestionSelectionView onQuestionSelect={() => setActiveStep('question')} />;
     }
 
-    // Reading and Question steps share the same layout
+    // Reading step - standalone layout
+    if (activeStep === 'reading') {
+      return (
+        <div className="flex flex-1 gap-6 p-6 overflow-hidden" style={{ height: 'calc(100vh - 52px)' }}>
+          <main className="flex-1 flex flex-col relative overflow-hidden bg-white rounded">
+            <ReadingViewer onComplete={() => setActiveStep('question')} onBack={() => setActiveStep('questionSelect')} />
+          </main>
+        </div>
+      );
+    }
+
+    // Question/discussion step - new two-column layout
     return (
-      <div className="flex flex-1 gap-6 p-6 overflow-hidden" style={{ height: 'calc(100vh - 52px)' }}>
-        {/* Chat - Only show when on 'question' step */}
-        {activeStep === 'question' && (
-          <div className="w-96 bg-white rounded flex flex-col flex-shrink-0 h-full overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Secondary Nav Bar */}
+        <div className="bg-white border-b border-black/35 px-6 py-2.5 flex items-center justify-between shrink-0" style={{ gap: '64px' }}>
+          <button
+            onClick={() => setActiveStep('questionSelect')}
+            className="flex items-center gap-3 text-sm font-mulish text-black hover:text-gray-700 transition-colors"
+          >
+            <ArrowLeft className="w-6 h-6 text-[#374957]" />
+            Back to home
+          </button>
+          <div className="flex items-center gap-6 bg-[#efefef] rounded px-3 py-2 flex-1 max-w-[700px]">
+            <span className="text-sm font-mulish text-black/75">Discussion Activity</span>
+            <span className="text-sm font-mulish text-black/75">Question 1 of 3</span>
+          </div>
+          <button className="flex items-center gap-3 text-sm font-mulish text-black cursor-default">
+            Skip Question
+            <ArrowLeft className="w-6 h-6 text-[#374957] rotate-180" />
+          </button>
+        </div>
+
+        {/* Two-column layout */}
+        <div className="flex-1 flex overflow-hidden relative">
+          {/* Left Column - Discussion */}
+          <div className="w-[734px] flex flex-col overflow-hidden border-r border-black/35 bg-white shrink-0">
+            {/* Question info header */}
+            <div className="p-6 border-b border-black/35 flex gap-4">
+              <div className="flex-1 flex flex-col gap-[11px]">
+                <h2 className="text-xl font-medium font-karla text-black" style={{ lineHeight: '23px' }}>Help clarify Thomas and Jamie&apos;s questions</h2>
+                <p className="text-sm font-mulish text-black/75" style={{ lineHeight: '18px' }}>
+                  Click on finish conversation once you are confident that you have the right answer, and have checked all the boxes.
+                </p>
+                <div className="bg-[#fafafa] border border-[#d7d7d7] rounded" style={{ padding: '15px 16px', width: '433px' }}>
+                  <p className="font-semibold font-mulish text-black" style={{ fontSize: '16px', lineHeight: '20px' }}>
+                    How did the drought affect forests and non-farming communities across Canada?
+                  </p>
+                </div>
+              </div>
+              {/* Learning checklist */}
+              <div className="w-[171px] border border-black/35 rounded p-3 shrink-0 self-stretch">
+                <span className="text-sm font-semibold font-mulish text-black" style={{ lineHeight: '18px' }}>Learning checklist</span>
+              </div>
+            </div>
+
+            {/* Chat area */}
             <Chat
               messages={messages}
               onSendMessage={handleSendMessage}
               isJamieTyping={isJamieTyping}
               isThomasTyping={isThomasTyping}
-              agentState={agentState}
+              onFinish={() => setShowFinishModal(true)}
             />
           </div>
-        )}
 
-        {/* Main Workspace - Reading, or Question + optional PDF reference */}
-        <main className="flex-1 flex flex-col relative overflow-hidden bg-white rounded">
-          {activeStep === 'reading' ? (
-            <ReadingViewer onComplete={() => setActiveStep('question')} onBack={() => setActiveStep('questionSelect')} />
-          ) : (
-            <>
-              <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-                {showPdfReference ? (
-                  <div className="flex flex-col h-full p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-medium text-gray-500">Reference: Drought Reading</span>
-                    </div>
-                    <iframe
-                      src="/assets/Drought_Reading.pdf"
-                      title="Drought Reading"
-                      className="flex-1 w-full min-h-0 rounded-lg border border-gray-200 bg-gray-50"
-                    />
-                  </div>
-                ) : (
-                  <QuestionSection onBack={() => setActiveStep('reading')} agentState={agentState} />
-                )}
+          {/* Column toggle button */}
+          <div className="absolute left-[714px] top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-[0_4px_4px_rgba(0,0,0,0.09),0_1px_2px_rgba(0,0,0,0.1)] flex items-center justify-center">
+            <span className="text-black text-xs">‹ ›</span>
+          </div>
+
+          {/* Right Column - Tabbed content with PDF */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Tab bar */}
+            <div className="flex items-center bg-white border-b border-black/35">
+              <div className="flex items-center justify-center gap-2 px-5 py-2.5 cursor-default">
+                <Pencil className="w-3.5 h-3.5 text-[#374957]" />
+                <span className="text-sm font-mulish text-black">Whiteboard</span>
               </div>
-              {/* Arrow tab: collapse into PDF reading / back to discussion */}
-              <button
-                type="button"
-                onClick={() => setShowPdfReference((v) => !v)}
-                className="absolute top-1/2 -translate-y-1/2 right-0 w-8 h-16 flex items-center justify-center bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-l-lg shadow-sm transition-colors z-10"
-                title={showPdfReference ? 'Back to discussion' : 'View reading'}
-                aria-label={showPdfReference ? 'Back to discussion' : 'View reading'}
-              >
-                {showPdfReference ? (
-                  <ChevronRight className="w-5 h-5 text-gray-600" />
-                ) : (
-                  <ChevronLeft className="w-5 h-5 text-gray-600" />
-                )}
-              </button>
-            </>
-          )}
-        </main>
+              <div className="flex items-center justify-center gap-2 px-5 py-2.5 border-b border-[#0c8e3f]">
+                <FileText className="w-3.5 h-3.5 text-[#0c8e3f]" />
+                <span className="text-sm font-mulish text-[#0c8e3f]">Uploaded Content</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 px-5 py-2.5 cursor-default">
+                <BookOpen className="w-3.5 h-3.5 text-[#374957]" />
+                <span className="text-sm font-mulish text-black">Rubric</span>
+              </div>
+            </div>
+
+            {/* PDF viewer */}
+            <div className="flex-1 min-h-0 bg-[#525659]">
+              <iframe
+                src="/assets/Drought_Reading.pdf"
+                title="Drought Reading"
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Finish conversation modal */}
+        {showFinishModal && (
+          <QuestionSection onClose={() => setShowFinishModal(false)} agentState={agentState} />
+        )}
       </div>
     );
   };

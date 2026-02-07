@@ -1,9 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Send } from 'lucide-react';
+import React, { useRef, useEffect } from 'react';
+import { Send, Check } from 'lucide-react';
 
-const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentState }) => {
+const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, onFinish }) => {
   const scrollRef = useRef(null);
-  const [stancePreview, setStancePreview] = useState(null); // 'jamie' | 'thomas' | null — click avatar to reveal
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -20,100 +19,68 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentSta
     }
   };
 
-  const getStatusStyles = (charId) => {
-    const status = agentState[charId]?.status || 'RED';
-    if (status === 'GREEN') return 'border-green-500/50 shadow-[0_0_12px_rgba(34,197,94,0.5)]';
-    if (status === 'YELLOW') return 'border-yellow-400/50 shadow-[0_0_12px_rgba(250,204,21,0.5)]';
-    return 'border-red-500/50 shadow-[0_0_12px_rgba(239,68,68,0.5)]';
-  };
-
   return (
-    <div className="flex flex-col flex-1 bg-white min-h-0">
-      {/* Chat Header */}
-      <div className="p-5 border-b border-gray-100">
-        <div className="flex items-center space-x-4">
-          <div className="flex -space-x-4">
-            <button
-              type="button"
-              onClick={() => setStancePreview(prev => (prev === 'jamie' ? null : 'jamie'))}
-              className="rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
-              title="Click to view current stance (reference)"
-            >
-              <div className={`w-14 h-14 rounded-full border-4 ${getStatusStyles('jamie')} overflow-hidden bg-orange-100 z-10 transition-all duration-500 cursor-pointer hover:opacity-90`}>
-                <img src="/assets/jamie_beaver.png" alt="Jamie" className="w-full h-full object-cover" />
-              </div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setStancePreview(prev => (prev === 'thomas' ? null : 'thomas'))}
-              className="rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
-              title="Click to view current stance (reference)"
-            >
-              <div className={`w-14 h-14 rounded-full border-4 ${getStatusStyles('thomas')} overflow-hidden bg-blue-100 transition-all duration-500 cursor-pointer hover:opacity-90`}>
-                <img src="/assets/thomas_goose.png" alt="Thomas" className="w-full h-full object-cover" />
-              </div>
-            </button>
-          </div>
-          <div>
-            <h2 className="font-bold text-gray-900 text-base leading-tight">Thomas & Jamie</h2>
-            <div className="flex items-center mt-0.5">
-              <div className="w-2 h-2 rounded-full bg-green-500 mr-1.5"></div>
-              <span className="text-xs text-gray-500 font-medium">Active</span>
-            </div>
-          </div>
-        </div>
-        {/* Reference: current stance (hidden until avatar clicked) */}
-        {stancePreview && agentState?.[stancePreview] && (
-          <div className="mt-3 p-3 rounded-lg bg-gray-50 border border-gray-200 text-left">
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Reference — {stancePreview === 'jamie' ? 'Jamie' : 'Thomas'}&apos;s current stance</span>
-            <p className="text-xs text-gray-700 mt-1 leading-relaxed">{agentState[stancePreview].opinion}</p>
-            <p className="text-[10px] text-gray-400 mt-1.5">Status: {agentState[stancePreview].status}</p>
-          </div>
-        )}
-      </div>
-
+    <div className="flex flex-col flex-1 min-h-0 justify-between">
       {/* Messages area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#f8fafc]">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto flex flex-col gap-[14px] px-6 pt-6 pb-3">
         {messages.map((msg, i) => (
-          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-start space-x-3'}`}>
+          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-center gap-2'}`}>
             {msg.role === 'assistant' && (
-              <div className={`w-10 h-10 rounded-full border-2 border-white overflow-hidden flex-shrink-0 ${msg.character === 'jamie' ? 'bg-orange-100' : 'bg-blue-100'} shadow-sm`}>
-                 <img src={`/assets/${msg.character === 'jamie' ? 'jamie_beaver.png' : 'thomas_goose.png'}`} alt={msg.character} className="w-full h-full object-cover" />
+              <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                <img src={`/assets/${msg.character === 'jamie' ? 'jamiechat.png' : 'thomaschat.png'}`} alt={msg.character} className="w-full h-full object-cover" />
               </div>
             )}
-            <div className={`max-w-[80%] rounded-xl px-4 py-3 text-xs leading-relaxed shadow-sm ${
-              msg.role === 'user' 
-                ? 'bg-[#2563eb] text-white rounded-tr-none' 
-                : 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
-            }`}>
+            <div className={`rounded font-mulish ${
+              msg.role === 'user'
+                ? 'bg-[#fafafa] border border-[#d7d7d7] text-black'
+                : 'bg-[#f5f9ff] border border-[#c2d5f2] text-black'
+            }`} style={{
+              padding: '10px 14px',
+              fontSize: '14px',
+              lineHeight: '18px',
+              maxWidth: msg.role === 'user' ? '380px' : '500px',
+            }}>
               {msg.content}
             </div>
           </div>
         ))}
-        
+
         {(isJamieTyping || isThomasTyping) && (
-          <div className="flex items-start space-x-3">
-             <div className={`w-10 h-10 rounded-full border-2 border-white overflow-hidden flex-shrink-0 ${isJamieTyping ? 'bg-orange-100' : 'bg-blue-100'} shadow-sm animate-pulse`}>
-                <img src={`/assets/${isJamieTyping ? 'jamie_beaver.png' : 'thomas_goose.png'}`} alt="typing" className="w-full h-full object-cover opacity-50" />
-             </div>
-             <div className="bg-white text-gray-400 shadow-sm border border-gray-100 rounded-xl rounded-tl-none px-4 py-2 text-[10px] font-medium animate-pulse">
-                {isJamieTyping ? 'Jamie is thinking...' : 'Thomas is reflecting...'}
-             </div>
+          <div className="flex items-center gap-2">
+            <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 animate-pulse">
+              <img src={`/assets/${isJamieTyping ? 'jamiechat.png' : 'thomaschat.png'}`} alt="typing" className="w-full h-full object-cover opacity-50" />
+            </div>
+            <div className="bg-[#f5f9ff] border border-[#c2d5f2] text-gray-400 rounded font-mulish animate-pulse" style={{ padding: '10px 14px', fontSize: '14px', lineHeight: '18px' }}>
+              {isJamieTyping ? 'Jamie is thinking...' : 'Thomas is reflecting...'}
+            </div>
           </div>
         )}
       </div>
 
+      {/* Finish conversation button */}
+      <div className="flex justify-end px-6 py-2">
+        <button
+          onClick={onFinish}
+          className="bg-white border border-black/35 rounded flex items-center gap-3 text-sm font-mulish text-black hover:bg-gray-50 transition-colors"
+          style={{ padding: '8px 16px', height: '36px', lineHeight: '18px' }}
+        >
+          Finish conversation
+          <Check className="w-5 h-5" />
+        </button>
+      </div>
+
       {/* Input area */}
-      <div className="p-4 border-t border-gray-100 bg-white">
-        <form onSubmit={handleSubmit} className="flex space-x-2">
+      <div className="border-t border-black/30 px-6 py-4">
+        <form onSubmit={handleSubmit} className="flex gap-[10px]">
           <input
             name="message"
             autoComplete="off"
             placeholder="Engage in the conversation here..."
-            className="flex-1 p-3 bg-white border border-gray-200 rounded-lg text-xs outline-none focus:border-blue-500/50 transition-all placeholder:text-gray-400"
+            className="flex-1 bg-white border border-black/50 rounded font-mulish outline-none focus:border-black/70 transition-all placeholder:text-black/50"
+            style={{ padding: '10px 14px', fontSize: '14px', lineHeight: '18px', height: '40px' }}
           />
-          <button type="submit" className="p-3 border border-gray-200 text-gray-400 rounded-lg hover:text-blue-600 transition-all active:scale-95">
-            <Send className="w-4 h-4" />
+          <button type="submit" className="w-10 h-10 bg-white border border-black/35 rounded flex items-center justify-center hover:bg-gray-50 transition-all active:scale-95">
+            <Send className="w-5 h-5 text-black" />
           </button>
         </form>
       </div>
