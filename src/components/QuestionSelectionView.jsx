@@ -10,6 +10,13 @@ const questions = [
   {
     id: 1,
     text: 'How did the drought affect forests and other non-farming communities across Canada?',
+    tag: 'Comprehension',
+    askedBy: 'Jamie and Thomas',
+  },
+  {
+    id: 2,
+    text: 'What similarities and differences did you notice between other regions droughts have affected and the Prairies?',
+    tag: 'Comparison',
     askedBy: 'Jamie and Thomas',
   },
 ];
@@ -46,7 +53,7 @@ const QuestionSelectionView = ({ onQuestionSelect }) => {
         {/* Right panel - questions */}
         <div className="flex-1 bg-white rounded p-9 flex flex-col gap-9 overflow-y-auto">
           <div className="flex flex-col gap-3">
-            <h1 className="text-[32px] font-semibold font-karla text-black">Your list of questions</h1>
+            <h1 className="text-[32px] font-semibold font-karla text-black">Your list of activities</h1>
             <p className="text-base font-mulish text-black">
               Topics will influence what kinds of problems and questions we will come up for you.
             </p>
@@ -55,10 +62,13 @@ const QuestionSelectionView = ({ onQuestionSelect }) => {
           <div className="flex flex-col gap-4">
             {questions.map((q) => (
               <div key={q.id} className="border border-black/15 rounded p-4 flex items-end justify-between gap-6">
-                <div className="flex flex-col gap-3 flex-1">
-                  <p className="text-2xl font-medium font-karla text-black leading-tight">
+                <div className="flex flex-col gap-3 flex-1 min-w-0">
+                  <p className="text-xl font-medium font-karla text-black leading-tight">
                     {q.text}
                   </p>
+                  <span className="border border-[#0c8e3f] text-[#0c8e3f] text-sm font-mulish px-3 py-0.5 rounded w-fit">
+                    {q.tag}
+                  </span>
                   <div className="flex items-center gap-2">
                     <img src="/assets/jamie_beaver.png" alt="Jamie" className="w-10 h-10 rounded-full object-cover" />
                     <img src="/assets/thomas_goose.png" alt="Thomas" className="w-10 h-10 rounded-full object-cover border-2 border-white -ml-4" />
@@ -68,10 +78,10 @@ const QuestionSelectionView = ({ onQuestionSelect }) => {
 
                 <button
                   onClick={() => onQuestionSelect(q.id)}
-                  className="bg-[#0c8e3f] hover:bg-[#0a7534] transition-colors text-white px-6 py-3 rounded flex items-center gap-4 whitespace-nowrap shrink-0"
+                  className="bg-[#0c8e3f] hover:bg-[#0a7534] transition-colors text-white px-4 py-2 rounded flex items-center gap-3 whitespace-nowrap shrink-0"
                 >
-                  <span className="text-base font-mulish">Start learning</span>
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <span className="text-sm font-mulish">Start learning</span>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
