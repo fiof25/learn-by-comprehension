@@ -1,14 +1,5 @@
 import React from 'react';
 
-const StarIcon = () => (
-  <svg viewBox="0 0 32 32" className="w-8 h-[30px]">
-    <path
-      d="M16 2L19.09 11.26L29 11.44L21.18 17.14L24.09 26.56L16 21.12L7.91 26.56L10.82 17.14L3 11.44L12.91 11.26L16 2Z"
-      fill="#FDB022"
-    />
-  </svg>
-);
-
 const fileInfo = {
   title: 'Drought on the Prairies',
   thumbnail: '/assets/drought_banner.png',
@@ -23,23 +14,9 @@ const questions = [
   },
 ];
 
-const QuestionSelectionView = ({ onQuestionSelect, onGoHome }) => {
+const QuestionSelectionView = ({ onQuestionSelect }) => {
   return (
-    <div className="min-h-screen bg-[#f6f6f6] flex flex-col">
-      {/* Navbar */}
-      <header className="bg-[#1a1a1a] h-[52px] flex items-center justify-between px-8">
-        <div className="flex items-center gap-1 px-3 cursor-pointer" onClick={onGoHome}>
-          <StarIcon />
-          <span className="text-white text-lg font-bold font-karla">Protégé</span>
-        </div>
-        <div className="flex items-center gap-5 text-white text-sm font-mulish">
-          <span className="cursor-pointer">Login</span>
-          <span className="cursor-pointer">Signup</span>
-        </div>
-      </header>
-
-      {/* Main */}
-      <div className="flex-1 flex gap-6 p-6 overflow-hidden" style={{ height: 'calc(100vh - 52px)' }}>
+    <div className="flex-1 flex gap-6 p-6 overflow-hidden" style={{ height: 'calc(100vh - 52px)' }}>
         {/* Left panel - file info */}
         <div className="w-[523px] bg-white rounded p-9 flex flex-col gap-8 shrink-0 overflow-y-auto">
           <div className="flex flex-col gap-2">
@@ -102,7 +79,6 @@ const QuestionSelectionView = ({ onQuestionSelect, onGoHome }) => {
             ))}
           </div>
         </div>
-      </div>
     </div>
   );
 };

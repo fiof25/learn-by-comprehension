@@ -7,6 +7,15 @@ import HomePage from './components/HomePage';
 import LoadingScreen from './components/LoadingScreen';
 import QuestionSelectionView from './components/QuestionSelectionView';
 
+const StarIcon = () => (
+  <svg viewBox="0 0 32 32" className="w-8 h-[30px]">
+    <path
+      d="M16 2L19.09 11.26L29 11.44L21.18 17.14L24.09 26.56L16 21.12L7.91 26.56L10.82 17.14L3 11.44L12.91 11.26L16 2Z"
+      fill="#FDB022"
+    />
+  </svg>
+);
+
 function App() {
   const [activeStep, setActiveStep] = useState('home'); // 'home' | 'loading' | 'questionSelect' | 'reading' | 'question'
   const [showPdfReference, setShowPdfReference] = useState(false); // when on question step, toggle main area to PDF
@@ -115,41 +124,19 @@ function App() {
     }
   }, [activeStep]);
 
-  // Full-page screens before the learning experience
-  if (activeStep === 'home') {
-    return <HomePage onStartLearning={() => setActiveStep('loading')} />;
-  }
-  if (activeStep === 'loading') {
-    return <LoadingScreen onGoHome={() => setActiveStep('home')} />;
-  }
-  if (activeStep === 'questionSelect') {
-    return <QuestionSelectionView onQuestionSelect={() => setActiveStep('reading')} onGoHome={() => setActiveStep('home')} />;
-  }
+  const renderContent = () => {
+    if (activeStep === 'home') {
+      return <HomePage onStartLearning={() => setActiveStep('loading')} />;
+    }
+    if (activeStep === 'loading') {
+      return <LoadingScreen />;
+    }
+    if (activeStep === 'questionSelect') {
+      return <QuestionSelectionView onQuestionSelect={() => setActiveStep('reading')} />;
+    }
 
-  const StarIcon = () => (
-    <svg viewBox="0 0 32 32" className="w-6 h-5">
-      <path
-        d="M16 2L19.09 11.26L29 11.44L21.18 17.14L24.09 26.56L16 21.12L7.91 26.56L10.82 17.14L3 11.44L12.91 11.26L16 2Z"
-        fill="#FDB022"
-      />
-    </svg>
-  );
-
-  return (
-    <div className="h-screen bg-[#f6f6f6] flex flex-col overflow-hidden">
-      {/* Navbar */}
-      <header className="bg-[#1a1a1a] h-[52px] flex items-center justify-between px-8 shrink-0">
-        <div className="flex items-center gap-1 px-3 cursor-pointer" onClick={() => setActiveStep('home')}>
-          <StarIcon />
-          <span className="text-white text-lg font-bold font-karla">Protégé</span>
-        </div>
-        <div className="flex items-center gap-5 text-white text-sm font-mulish">
-          <span className="cursor-pointer">Login</span>
-          <span className="cursor-pointer">Signup</span>
-        </div>
-      </header>
-
-      {/* Main Content Area */}
+    // Reading and Question steps share the same layout
+    return (
       <div className="flex flex-1 gap-6 p-6 overflow-hidden" style={{ height: 'calc(100vh - 52px)' }}>
         {/* Chat - Only show when on 'question' step */}
         {activeStep === 'question' && (
@@ -204,6 +191,25 @@ function App() {
           )}
         </main>
       </div>
+    );
+  };
+
+  return (
+    <div className="h-screen bg-[#f6f6f6] flex flex-col overflow-hidden">
+      {/* Navbar - consistent across all screens */}
+      <header className="bg-[#1a1a1a] h-[52px] flex items-center justify-between px-8 shrink-0">
+        <div className="flex items-center gap-1 px-3 cursor-pointer" onClick={() => setActiveStep('home')}>
+          <StarIcon />
+          <span className="text-white text-lg font-bold font-karla">Protégé</span>
+        </div>
+        <div className="flex items-center gap-5 text-white text-sm font-mulish">
+          <span className="cursor-pointer">Login</span>
+          <span className="cursor-pointer">Signup</span>
+        </div>
+      </header>
+
+      {/* Screen Content */}
+      {renderContent()}
     </div>
   );
 }
