@@ -3,7 +3,7 @@ import React from 'react';
 const fileInfo = {
   title: 'Drought on the Prairies',
   thumbnail: '/assets/drought_banner.png',
-  topics: ['Wildfires', 'Air Quality', 'Health Risks', 'Evacuations', 'Forests', 'Eastern Canada'],
+  topics: ['Reading', 'English', 'Science', 'Nature', 'Geography', 'Environment'],
 };
 
 const questions = [
@@ -42,7 +42,7 @@ const QuestionSelectionView = ({ onQuestionSelect }) => {
             <p className="text-base font-mulish text-black">Chosen Topics</p>
             <div className="flex flex-wrap gap-4">
               {fileInfo.topics.map((topic, i) => (
-                <span key={i} className="bg-[#e6e6e6] px-6 py-2 rounded-[20px] text-base font-mulish text-black">
+                <span key={i} className="bg-[#e6e6e6] px-4 py-1 rounded-[20px] text-sm font-mulish text-black">
                   {topic}
                 </span>
               ))}
@@ -77,8 +77,8 @@ const QuestionSelectionView = ({ onQuestionSelect }) => {
                 </div>
 
                 <button
-                  onClick={() => onQuestionSelect(q.id)}
-                  className="bg-[#0c8e3f] hover:bg-[#0a7534] transition-colors text-white px-4 py-2 rounded flex items-center gap-3 whitespace-nowrap shrink-0"
+                  onClick={() => q.id === 1 && onQuestionSelect(q.id)}
+                  className={`${q.id === 1 ? 'bg-[#0c8e3f] hover:bg-[#0a7534] cursor-pointer' : 'bg-[#0c8e3f]/50 cursor-default'} transition-colors text-white px-4 py-2 rounded flex items-center gap-3 whitespace-nowrap shrink-0`}
                 >
                   <span className="text-sm font-mulish">Start learning</span>
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

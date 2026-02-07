@@ -30,10 +30,12 @@ const ReadingViewer = ({ onComplete, onBack }) => {
         </button>
         <button
           onClick={onComplete}
-          className="px-8 py-3 bg-[#16a34a] text-white text-sm font-bold rounded-lg hover:bg-[#15803d] transition-all flex items-center shadow-sm"
+          className="bg-[#0c8e3f] hover:bg-[#0a7534] transition-colors text-white px-6 py-2.5 rounded flex items-center gap-3 text-sm font-mulish"
         >
           Continue
-          <span className="ml-2 text-lg">→</span>
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
         </button>
       </div>
     </div>
