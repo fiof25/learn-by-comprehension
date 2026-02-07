@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Send, Check } from 'lucide-react';
 
-const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, onFinish }) => {
+const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, onFinish, onSubmitAsAnswer }) => {
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, onFinish
       {/* Messages area */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto flex flex-col gap-[14px] px-6 pt-6 pb-3">
         {messages.map((msg, i) => (
-          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-center gap-2'}`}>
+          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-center gap-2'} ${msg.role === 'user' ? 'group relative' : ''}`}>
             {msg.role === 'assistant' && (
               <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                 <img src={`/assets/${msg.character === 'jamie' ? 'jamiechat.png' : 'thomaschat.png'}`} alt={msg.character} className="w-full h-full object-cover" />
@@ -42,6 +42,15 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, onFinish
             }}>
               {msg.content}
             </div>
+            {msg.role === 'user' && (
+              <button
+                onClick={() => onSubmitAsAnswer(msg.content)}
+                className="absolute -bottom-6 right-0 hidden group-hover:flex items-center gap-1.5 px-2.5 py-1 bg-white border border-black/20 rounded shadow-sm text-xs font-mulish text-black/70 hover:text-black hover:border-black/35 transition-all z-10"
+              >
+                <Check className="w-3 h-3" />
+                Submit as answer
+              </button>
+            )}
           </div>
         ))}
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Pencil, FileText, BookOpen } from 'lucide-react';
 import Chat from './components/Chat';
-import ReadingViewer from './components/ReadingViewer';
 import QuestionSection from './components/QuestionSection';
 import HomePage from './components/HomePage';
 import LoadingScreen from './components/LoadingScreen';
@@ -17,8 +16,9 @@ const StarIcon = () => (
 );
 
 function App() {
-  const [activeStep, setActiveStep] = useState('home'); // 'home' | 'loading' | 'questionSelect' | 'reading' | 'question'
+  const [activeStep, setActiveStep] = useState('home'); // 'home' | 'loading' | 'questionSelect' | 'question'
   const [showFinishModal, setShowFinishModal] = useState(false);
+  const [prefillAnswer, setPrefillAnswer] = useState('');
   const [messages, setMessages] = useState([]);
   const [isJamieTyping, setIsJamieTyping] = useState(false);
   const [isThomasTyping, setIsThomasTyping] = useState(false);
@@ -135,17 +135,6 @@ function App() {
       return <QuestionSelectionView onQuestionSelect={() => setActiveStep('question')} />;
     }
 
-    // Reading step - standalone layout
-    if (activeStep === 'reading') {
-      return (
-        <div className="flex flex-1 gap-6 p-6 overflow-hidden" style={{ height: 'calc(100vh - 52px)' }}>
-          <main className="flex-1 flex flex-col relative overflow-hidden bg-white rounded">
-            <ReadingViewer onComplete={() => setActiveStep('question')} onBack={() => setActiveStep('questionSelect')} />
-          </main>
-        </div>
-      );
-    }
-
     // Question/discussion step - new two-column layout
     return (
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -158,9 +147,9 @@ function App() {
             <ArrowLeft className="w-6 h-6 text-[#374957]" />
             Back to home
           </button>
-          <div className="flex items-center gap-6 bg-[#efefef] rounded px-3 py-2 flex-1 max-w-[700px]">
-            <span className="text-sm font-mulish text-black/75">Discussion Activity</span>
-            <span className="text-sm font-mulish text-black/75">Question 1 of 3</span>
+          <div className="flex items-center gap-5 bg-[#efefef] rounded px-2.5 py-1.5 flex-1 max-w-[700px]">
+            <span className="text-xs font-mulish text-black/75">Discussion Activity</span>
+            <span className="text-xs font-mulish text-black/75">Question 1 of 3</span>
           </div>
           <button className="flex items-center gap-3 text-sm font-mulish text-black cursor-default">
             Skip Question
@@ -198,6 +187,7 @@ function App() {
               isJamieTyping={isJamieTyping}
               isThomasTyping={isThomasTyping}
               onFinish={() => setShowFinishModal(true)}
+              onSubmitAsAnswer={(content) => { setPrefillAnswer(content); setShowFinishModal(true); }}
             />
           </div>
 
@@ -237,7 +227,7 @@ function App() {
 
         {/* Finish conversation modal */}
         {showFinishModal && (
-          <QuestionSection onClose={() => setShowFinishModal(false)} agentState={agentState} />
+          <QuestionSection onClose={() => { setShowFinishModal(false); setPrefillAnswer(''); }} agentState={agentState} prefillAnswer={prefillAnswer} />
         )}
       </div>
     );

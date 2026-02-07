@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { X, Shield, ShieldAlert, ShieldCheck, ArrowRight } from 'lucide-react';
 
-const QuestionSection = ({ onClose, agentState }) => {
-  const [answer, setAnswer] = useState('');
+const QuestionSection = ({ onClose, agentState, prefillAnswer = '' }) => {
+  const [answer, setAnswer] = useState(prefillAnswer);
   const [showFeedback, setShowFeedback] = useState(null); // 'correct' or 'incorrect'
   const [isChecking, setIsChecking] = useState(false);
   const [apiFeedback, setApiFeedback] = useState({ title: '', desc: '' });
