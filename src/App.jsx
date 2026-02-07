@@ -186,6 +186,7 @@ function App() {
               onSendMessage={handleSendMessage}
               isJamieTyping={isJamieTyping}
               isThomasTyping={isThomasTyping}
+              agentState={agentState}
               onFinish={() => setShowFinishModal(true)}
               onSubmitAsAnswer={(content) => { setPrefillAnswer(content); setShowFinishModal(true); }}
             />

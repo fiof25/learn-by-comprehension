@@ -10,13 +10,16 @@ const ReadingViewer = ({ onComplete, onBack }) => {
         <p className="text-sm text-gray-400 mt-1 font-medium">Press continue when you are finished reading</p>
       </div>
 
-      {/* PDF centered */}
+      {/* PDF centered — wrapper clips the browser's native toolbar */}
       <div className="flex-1 flex items-center justify-center min-h-0 px-8 py-4">
-        <iframe
-          src="/assets/Drought_Reading.pdf"
-          title="Drought Reading"
-          className="w-full max-w-[700px] h-full rounded-lg border border-gray-100 bg-gray-50"
-        />
+        <div className="w-full max-w-[700px] h-full rounded-lg border border-gray-100 bg-gray-50 overflow-hidden">
+          <iframe
+            src="/assets/Drought_Reading.pdf#toolbar=0"
+            title="Drought Reading"
+            className="w-full border-none"
+            style={{ height: 'calc(100% + 40px)', marginTop: '-40px' }}
+          />
+        </div>
       </div>
 
       {/* Bottom Action Bar */}

@@ -1,8 +1,21 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Send, Check } from 'lucide-react';
 
-const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, onFinish, onSubmitAsAnswer }) => {
+const statusGlow = {
+  RED: 'drop-shadow(0 0 6px rgba(239, 68, 68, 0.6))',
+  YELLOW: 'drop-shadow(0 0 6px rgba(234, 179, 8, 0.65))',
+  GREEN: 'drop-shadow(0 0 6px rgba(34, 197, 94, 0.7))',
+};
+
+const statusTooltip = {
+  RED: { label: 'Unconvinced', bg: '#FFE0E0', border: '#D32F2F', dot: '#E57373', text: '#8B4444' },
+  YELLOW: { label: 'Unsure', bg: '#FFF8DC', border: '#F9A825', dot: '#FFD54F', text: '#7A6A2E' },
+  GREEN: { label: 'Convinced', bg: '#CFFFE1', border: '#00A928', dot: '#89CCA1', text: '#5B886B' },
+};
+
+const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentState, onFinish, onSubmitAsAnswer }) => {
   const scrollRef = useRef(null);
+  const [tooltip, setTooltip] = useState(null);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -19,15 +32,63 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, onFinish
     }
   };
 
+  const showTooltip = (e, character) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltip({
+      character,
+      x: rect.right + 8,
+      y: rect.top - 8,
+    });
+  };
+
+  const hideTooltip = () => setTooltip(null);
+
+  const renderTooltipPortal = () => {
+    if (!tooltip) return null;
+    const status = agentState?.[tooltip.character]?.status;
+    const config = statusTooltip[status];
+    if (!config) return null;
+    const name = tooltip.character === 'jamie' ? 'Jamie' : 'Thomas';
+    return (
+      <div
+        className="fixed z-50 flex items-center gap-1.5 whitespace-nowrap pointer-events-none"
+        style={{
+          left: tooltip.x,
+          top: tooltip.y,
+          transform: 'translateY(-100%)',
+          background: config.bg,
+          border: `1px solid ${config.border}`,
+          borderRadius: '50px',
+          padding: '4px 12px',
+        }}
+      >
+        <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: config.dot }} />
+        <span className="font-karla font-medium" style={{ fontSize: '12px', letterSpacing: '-0.04em', color: config.text }}>
+          {name} is {config.label}
+        </span>
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col flex-1 min-h-0 justify-between">
+      {renderTooltipPortal()}
       {/* Messages area */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto flex flex-col gap-[20px] px-6 pt-6 pb-3">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-center gap-2'} ${msg.role === 'user' ? 'group relative' : ''}`}>
             {msg.role === 'assistant' && (
-              <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-                <img src={`/assets/${msg.character === 'jamie' ? 'jamiechat.png' : 'thomaschat.png'}`} alt={msg.character} className="w-full h-full object-cover" />
+              <div
+                className="w-12 h-12 flex-shrink-0 cursor-pointer"
+                onMouseEnter={(e) => showTooltip(e, msg.character)}
+                onMouseLeave={hideTooltip}
+              >
+                <img
+                  src={`/assets/${msg.character === 'jamie' ? 'jamiechat.png' : 'thomaschat.png'}`}
+                  alt={msg.character}
+                  className="w-full h-full object-cover transition-[filter] duration-500"
+                  style={{ filter: statusGlow[agentState?.[msg.character]?.status] || 'none' }}
+                />
               </div>
             )}
             <div className={`rounded font-mulish ${
@@ -56,8 +117,17 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, onFinish
 
         {(isJamieTyping || isThomasTyping) && (
           <div className="flex items-center gap-2">
-            <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 animate-pulse">
-              <img src={`/assets/${isJamieTyping ? 'jamiechat.png' : 'thomaschat.png'}`} alt="typing" className="w-full h-full object-cover opacity-50" />
+            <div
+              className="w-12 h-12 flex-shrink-0 animate-pulse cursor-pointer"
+              onMouseEnter={(e) => showTooltip(e, isJamieTyping ? 'jamie' : 'thomas')}
+              onMouseLeave={hideTooltip}
+            >
+              <img
+                src={`/assets/${isJamieTyping ? 'jamiechat.png' : 'thomaschat.png'}`}
+                alt="typing"
+                className="w-full h-full object-cover opacity-50"
+                style={{ filter: statusGlow[agentState?.[isJamieTyping ? 'jamie' : 'thomas']?.status] || 'none' }}
+              />
             </div>
             <div className="bg-[#f5f9ff] border border-[#c2d5f2] text-gray-400 rounded font-mulish animate-pulse" style={{ padding: '10px 14px', fontSize: '14px', lineHeight: '18px' }}>
               {isJamieTyping ? 'Jamie is thinking...' : 'Thomas is reflecting...'}
