@@ -17,7 +17,7 @@ const questions = [
     id: 2,
     text: 'What similarities and differences did you notice between other regions droughts have affected and the Prairies?',
     tag: 'Comparison',
-    askedBy: 'Jamie and Thomas',
+    askedBy: 'Thomas',
   },
 ];
 
@@ -64,12 +64,12 @@ const QuestionSelectionView = ({ onQuestionSelect }) => {
               <div
                 key={q.id}
                 className="border border-black/15 rounded p-4 flex items-end justify-between gap-6"
-                style={q.id === 1 ? {
-                  backgroundImage: 'url(/assets/q1card.png)',
+                style={{
+                  backgroundImage: `url(/assets/q${q.id}card.png)`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'right bottom',
                   backgroundRepeat: 'no-repeat',
-                } : undefined}
+                }}
               >
                 <div className="flex flex-col gap-3 flex-1 min-w-0">
                   <p className="text-xl font-medium font-karla text-black leading-tight">

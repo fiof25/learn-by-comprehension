@@ -166,7 +166,7 @@ function App() {
               <div className="flex-1 flex flex-col gap-[11px]">
                 <h2 className="text-xl font-medium font-karla text-black" style={{ lineHeight: '23px' }}>Help clarify Thomas and Jamie&apos;s questions</h2>
                 <p className="text-sm font-mulish text-black/75" style={{ lineHeight: '18px' }}>
-                  Click on finish conversation once you are confident that you have the right answer, and have checked all the boxes.
+                  Click on finish conversation or hover over your message once you are confident that you have the right answer.
                 </p>
                 <div className="bg-[#fafafa] border border-[#d7d7d7] rounded" style={{ padding: '15px 16px', width: '433px' }}>
                   <p className="font-semibold font-mulish text-black" style={{ fontSize: '16px', lineHeight: '20px' }}>

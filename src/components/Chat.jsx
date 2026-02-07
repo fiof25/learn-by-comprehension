@@ -22,7 +22,7 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, onFinish
   return (
     <div className="flex flex-col flex-1 min-h-0 justify-between">
       {/* Messages area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto flex flex-col gap-[14px] px-6 pt-6 pb-3">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto flex flex-col gap-[20px] px-6 pt-6 pb-3">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-center gap-2'} ${msg.role === 'user' ? 'group relative' : ''}`}>
             {msg.role === 'assistant' && (
