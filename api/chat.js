@@ -7,11 +7,11 @@ const THOMAS_PROMPT = fs.readFileSync(path.join(process.cwd(), 'characters', 'TH
 
 const INITIAL_POSITIONS = {
     jamie: {
-        opinion: "The drought affected crops like wheat, canola, and barley. People at the ranch faced barren pastures and sold off cattle, and turned to irrigation but due to scarce water supplies it became too expensive.",
+        opinion: "The drought affected crops like wheat, canola, and barley. People at the ranch faced barren pastures and sold off cattle.",
         status: "RED"
     },
     thomas: {
-        opinion: "The drought affected forests by making trees dry and unhealthy, which caused problems for animals living there. It impacted non-farming communities because some people had to change their routines and deal with environmental challenges. Overall, the drought made life harder outside of farming areas as nature was damaged.",
+        opinion: "The drought affected forests by making trees dry and unhealthy, which caused problems for animals living there. It impacted non-farming communities as people had to deal with environmental challenges.",
         status: "RED"
     }
 };
@@ -51,8 +51,8 @@ TASK:
 Output ONLY this JSON:
 {
   "facts": [ {"fact": "...", "status": "HIDDEN|UNCOVERED"}, ... ],
-  "jamie": { "thoughtProcess": "...", "status": "RED|YELLOW|GREEN", "updatedOpinion": "...", "message": "..." },
-  "thomas": { "thoughtProcess": "...", "status": "RED|YELLOW|GREEN", "updatedOpinion": "...", "message": "..." }
+  "jamie": { "thoughtProcess": "...", "status": "RED|YELLOW|GREEN", "updatedOpinion": "... (max 2 sentences)", "message": "..." },
+  "thomas": { "thoughtProcess": "...", "status": "RED|YELLOW|GREEN", "updatedOpinion": "... (max 2 sentences)", "message": "..." }
 }
 `;
 

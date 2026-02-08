@@ -99,7 +99,7 @@ const QuestionSection = ({ onClose, agentState, prefillAnswer = '', checklist = 
             <textarea
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              placeholder="Type out your final answer to Thomas's question here:"
+              placeholder="Type out your final answer to Thomas and Jamie's question here:"
               className="flex-1 bg-white border border-black/50 rounded font-mulish outline-none focus:border-black/70 transition-all text-black/50 resize-none"
               style={{ padding: '16px', fontSize: '16px', lineHeight: '20px', minHeight: '160px' }}
             />

@@ -69,7 +69,7 @@ const ResultsPage = ({ answer, grades, onNext }) => {
     <div className="flex-1 flex flex-col items-center bg-white py-5 px-6 overflow-hidden">
       <div className="w-full max-w-[987px] flex flex-col gap-4 h-full">
         {/* Header */}
-        <h1 className="font-karla font-semibold text-black shrink-0" style={{ fontSize: '24px', lineHeight: '28px' }}>
+        <h1 className="font-karla font-semibold text-black shrink-0" style={{ fontSize: '22px', lineHeight: '28px' }}>
           Well done Chris! You've completed this activity.
         </h1>
 
