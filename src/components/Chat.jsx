@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Send, Check } from 'lucide-react';
 
-const statusGlow = {
-  RED: 'drop-shadow(0 0 6px rgba(239, 68, 68, 0.6))',
-  YELLOW: 'drop-shadow(0 0 6px rgba(234, 179, 8, 0.65))',
-  GREEN: 'drop-shadow(0 0 6px rgba(34, 197, 94, 0.7))',
+const statusBadge = {
+  RED: { symbol: '?', bg: '#DC2626', text: '#fff' },
+  YELLOW: { symbol: '~', bg: '#D97706', text: '#fff' },
+  GREEN: { symbol: '!', bg: '#16A34A', text: '#fff' },
 };
 
 const statusTooltip = {
@@ -79,16 +79,28 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentSta
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-center gap-2'} ${msg.role === 'user' ? 'group relative' : ''}`}>
             {msg.role === 'assistant' && (
               <div
-                className="w-12 h-12 flex-shrink-0 cursor-pointer"
+                className="w-12 h-12 flex-shrink-0 cursor-pointer relative"
                 onMouseEnter={(e) => showTooltip(e, msg.character)}
                 onMouseLeave={hideTooltip}
               >
                 <img
                   src={`/assets/${msg.character === 'jamie' ? 'jamiechat.png' : 'thomaschat.png'}`}
                   alt={msg.character}
-                  className="w-full h-full object-cover transition-[filter] duration-500"
-                  style={{ filter: statusGlow[agentState?.[msg.character]?.status] || 'none' }}
+                  className="w-full h-full object-cover"
                 />
+                {agentState?.[msg.character]?.status && statusBadge[agentState[msg.character].status] && (
+                  <span
+                    className="absolute top-[2px] left-0 w-4 h-4 rounded-full flex items-center justify-center font-bold text-[11px] leading-none shadow-sm"
+                    style={{
+                      background: statusBadge[agentState[msg.character].status].bg,
+                      color: statusBadge[agentState[msg.character].status].text,
+                      opacity: 0.5,
+                      transform: 'rotate(-10deg)',
+                    }}
+                  >
+                    {statusBadge[agentState[msg.character].status].symbol}
+                  </span>
+                )}
               </div>
             )}
             <div className={`rounded font-mulish ${
@@ -120,16 +132,36 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentSta
         {(isJamieTyping || isThomasTyping) && (
           <div className="flex items-center gap-2">
             <div
-              className="w-12 h-12 flex-shrink-0 animate-pulse cursor-pointer"
+              className="w-12 h-12 flex-shrink-0 animate-pulse cursor-pointer relative"
               onMouseEnter={(e) => showTooltip(e, isJamieTyping ? 'jamie' : 'thomas')}
               onMouseLeave={hideTooltip}
             >
-              <img
-                src={`/assets/${isJamieTyping ? 'jamiechat.png' : 'thomaschat.png'}`}
-                alt="typing"
-                className="w-full h-full object-cover opacity-50"
-                style={{ filter: statusGlow[agentState?.[isJamieTyping ? 'jamie' : 'thomas']?.status] || 'none' }}
-              />
+              {(() => {
+                const char = isJamieTyping ? 'jamie' : 'thomas';
+                const badge = statusBadge[agentState?.[char]?.status];
+                return (
+                  <>
+                    <img
+                      src={`/assets/${isJamieTyping ? 'jamiechat.png' : 'thomaschat.png'}`}
+                      alt="typing"
+                      className="w-full h-full object-cover opacity-50"
+                    />
+                    {badge && (
+                      <span
+                        className="absolute top-[2px] left-0 w-4 h-4 rounded-full flex items-center justify-center font-bold text-[11px] leading-none shadow-sm"
+                        style={{
+                          background: badge.bg,
+                          color: badge.text,
+                          opacity: 0.5,
+                          transform: 'rotate(-10deg)',
+                        }}
+                      >
+                        {badge.symbol}
+                      </span>
+                    )}
+                  </>
+                );
+              })()}
             </div>
             <div className="bg-[#f5f9ff] border border-[#c2d5f2] text-gray-400 rounded font-mulish animate-pulse" style={{ padding: '10px 14px', fontSize: '14px', lineHeight: '18px' }}>
               {isJamieTyping ? 'Jamie is thinking...' : 'Thomas is reflecting...'}

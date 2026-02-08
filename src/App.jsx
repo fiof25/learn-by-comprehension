@@ -204,8 +204,8 @@ function App() {
                         )}
                       </div>
                       <span
-                        className="font-mulish text-sm"
-                        style={{ lineHeight: '18px', color: item.completed ? '#0C8E3F' : '#966503' }}
+                        className="font-mulish text-xs"
+                        style={{ lineHeight: '16px', color: item.completed ? '#0C8E3F' : '#966503' }}
                       >
                         {item.label}
                       </span>
