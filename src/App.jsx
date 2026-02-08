@@ -22,6 +22,11 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [isJamieTyping, setIsJamieTyping] = useState(false);
   const [isThomasTyping, setIsThomasTyping] = useState(false);
+  const [checklist, setChecklist] = useState([
+    { id: 'analogy', label: 'Use an analogy in your explanation', completed: false },
+    { id: 'example', label: 'Bring up an example from the text', completed: false },
+    { id: 'story', label: '(Bonus) Tell an interesting story', completed: false },
+  ]);
   const [agentState, setAgentState] = useState({
     jamie: {
       opinion: "The drought affected crops like wheat, canola, and barley. People at the ranch faced barren pastures and sold off cattle, and turned to irrigation but due to scarce water supplies it became too expensive.",
@@ -100,6 +105,12 @@ function App() {
         if (response.updatedState) {
           setAgentState(response.updatedState);
         }
+        if (response.checklist) {
+          setChecklist(prev => prev.map(item => ({
+            ...item,
+            completed: item.completed || !!response.checklist[item.id],
+          })));
+        }
       } else if (response.error) {
         setMessages(prev => [...prev, {
           role: 'assistant',
@@ -164,19 +175,43 @@ function App() {
             {/* Question info header */}
             <div className="p-6 border-b border-black/35 flex gap-4">
               <div className="flex-1 flex flex-col gap-[11px]">
-                <h2 className="text-xl font-medium font-karla text-black" style={{ lineHeight: '23px' }}>Help clarify Thomas and Jamie&apos;s questions</h2>
-                <p className="text-sm font-mulish text-black/75" style={{ lineHeight: '18px' }}>
+                <h2 className="font-medium font-karla text-black" style={{ fontSize: '19.5px', lineHeight: '24px' }}>Help clarify Thomas and Jamie&apos;s questions</h2>
+                <p className="font-mulish text-black/75" style={{ fontSize: '12px', lineHeight: '16px' }}>
                   Click on finish conversation or hover over your message once you are confident that you have the right answer.
                 </p>
-                <div className="bg-[#fafafa] border border-[#d7d7d7] rounded" style={{ padding: '15px 16px', width: '433px' }}>
-                  <p className="font-semibold font-mulish text-black" style={{ fontSize: '16px', lineHeight: '20px' }}>
+                <div className="bg-[#fafafa] border border-[#d7d7d7] rounded" style={{ padding: '12px 14px' }}>
+                  <p className="font-semibold font-mulish text-black" style={{ fontSize: '14px', lineHeight: '18px', letterSpacing: '0.02em' }}>
                     How did the drought affect forests and non-farming communities across Canada?
                   </p>
                 </div>
               </div>
               {/* Learning checklist */}
-              <div className="w-[171px] border border-black/35 rounded p-3 shrink-0 self-stretch">
+              <div className="min-w-[220px] border border-black/35 rounded p-3 shrink-0 self-stretch flex flex-col gap-3">
                 <span className="text-sm font-semibold font-mulish text-black" style={{ lineHeight: '18px' }}>Learning checklist</span>
+                <div className="flex flex-col gap-3">
+                  {checklist.map((item) => (
+                    <div key={item.id} className="flex items-center gap-3">
+                      <div className="w-4 h-4 flex-shrink-0">
+                        {item.completed ? (
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <rect width="16" height="16" rx="2" fill="#0C8E3F" />
+                            <path d="M4 8L7 11L12 5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        ) : (
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <rect x="0.5" y="0.5" width="15" height="15" rx="1.5" stroke="#966503" />
+                          </svg>
+                        )}
+                      </div>
+                      <span
+                        className="font-mulish text-sm"
+                        style={{ lineHeight: '18px', color: item.completed ? '#0C8E3F' : '#966503' }}
+                      >
+                        {item.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -228,7 +263,7 @@ function App() {
 
         {/* Finish conversation modal */}
         {showFinishModal && (
-          <QuestionSection onClose={() => { setShowFinishModal(false); setPrefillAnswer(''); }} agentState={agentState} prefillAnswer={prefillAnswer} />
+          <QuestionSection onClose={() => { setShowFinishModal(false); setPrefillAnswer(''); }} agentState={agentState} prefillAnswer={prefillAnswer} checklist={checklist} />
         )}
       </div>
     );

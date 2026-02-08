@@ -60,6 +60,8 @@ app.post('/api/chat', async (req, res) => {
             console.log("Orchestrator Thought (Jamie):", data.jamie?.thoughtProcess);
             console.log("Orchestrator Thought (Thomas):", data.thomas?.thoughtProcess);
 
+            console.log("Checklist:", data.checklist);
+
             res.json({
                 responses: [
                     { character: 'jamie', message: data.jamie.message },
@@ -77,6 +79,7 @@ app.post('/api/chat', async (req, res) => {
                         thought: data.thomas.thoughtProcess
                     }
                 },
+                checklist: data.checklist || null,
                 facts: data.facts
             });
         } catch (parseError) {

@@ -30,9 +30,16 @@ TASK:
    - Be subtle when you do ask: react to their words; wonder aloud; ask open questions. No hints; no conceptual framing. Only react to what's already said. Under 15 words.
    - JAMIE: enthusiastic, "Wait..." or "Oh!", warm, tangential. THOMAS: precise but subtle. Once at 5+ themes (GREEN), both can say they have enough (e.g. "I think we've got the main stuff—ready to put it down?" or similar).
 
+LEARNING CHECKLIST — evaluate whether the user has done any of these IN THEIR OWN MESSAGES (not the agents'):
+- "analogy": Did the user use an analogy or comparison to explain a concept? (e.g. "it's like..." or comparing the drought to something else)
+- "example": Did the user bring up a specific example, fact, or detail from the reading text? (e.g. citing a statistic, place name, or specific event from the source)
+- "story": Did the user tell an interesting story or narrative to illustrate their point? (e.g. describing a scenario, painting a picture of what happened)
+Set each to true if the user has done it at any point in the conversation, false otherwise.
+
 Output ONLY this JSON:
 {
   "facts": [ {"fact": "...", "status": "HIDDEN|UNCOVERED"}, ... ],
+  "checklist": { "analogy": true/false, "example": true/false, "story": true/false },
   "jamie": { "thoughtProcess": "...", "status": "RED|YELLOW|GREEN", "updatedOpinion": "...", "message": "..." },
   "thomas": { "thoughtProcess": "...", "status": "RED|YELLOW|GREEN", "updatedOpinion": "...", "message": "..." }
 }

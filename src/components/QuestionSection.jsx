@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Shield, ShieldAlert, ShieldCheck, ArrowRight } from 'lucide-react';
 
-const QuestionSection = ({ onClose, agentState, prefillAnswer = '' }) => {
+const QuestionSection = ({ onClose, agentState, prefillAnswer = '', checklist = [] }) => {
   const [answer, setAnswer] = useState(prefillAnswer);
   const [showFeedback, setShowFeedback] = useState(null); // 'correct' or 'incorrect'
   const [isChecking, setIsChecking] = useState(false);
@@ -110,7 +110,7 @@ const QuestionSection = ({ onClose, agentState, prefillAnswer = '' }) => {
         </div>
       ) : (
         /* Finish Conversation Modal */
-        <div className="bg-white rounded flex flex-col gap-6" style={{ width: '714px', height: '496px', padding: '24px' }}>
+        <div className="bg-white rounded flex flex-col gap-6" style={{ width: '714px', padding: '24px' }}>
           {/* Header */}
           <div className="flex items-center gap-6">
             <h2 className="flex-1 font-mulish font-bold text-black" style={{ fontSize: '24px', lineHeight: '30px' }}>
@@ -123,11 +123,44 @@ const QuestionSection = ({ onClose, agentState, prefillAnswer = '' }) => {
 
           {/* Question display */}
           <div className="flex flex-col gap-3">
-            <p className="font-mulish text-black/50" style={{ fontSize: '16px', lineHeight: '20px' }}>Thomas and Jamie&apos;s question</p>
-            <div className="bg-[#F0F6FF] rounded" style={{ padding: '15px 16px' }}>
+            <p className="font-mulish text-black/50" style={{ fontSize: '16px', lineHeight: '20px' }}>Thomas and Jamie&apos;s question:</p>
+            <div className="bg-[#F0F6FF] rounded flex items-start gap-3" style={{ padding: '15px 16px' }}>
+              <div className="flex -space-x-2 flex-shrink-0">
+                <img src="/assets/jamiechat.png" alt="Jamie" className="w-9 h-9 rounded-full border-2 border-[#F0F6FF]" />
+                <img src="/assets/thomaschat.png" alt="Thomas" className="w-9 h-9 rounded-full border-2 border-[#F0F6FF]" />
+              </div>
               <p className="font-mulish text-black" style={{ fontSize: '16px', lineHeight: '20px' }}>
                 &ldquo;How did the drought affect forests and other non-farming communities across Canada?&rdquo;
               </p>
+            </div>
+          </div>
+
+          {/* Conversation checklist */}
+          <div className="flex flex-col gap-3">
+            <p className="font-mulish text-black/50" style={{ fontSize: '16px', lineHeight: '20px' }}>Your conversation so far:</p>
+            <div className="flex flex-wrap gap-3">
+              {checklist.map((item) => (
+                <div key={item.id} className="flex items-center gap-3">
+                  <div className="w-5 h-5 flex-shrink-0">
+                    {item.completed ? (
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <rect width="20" height="20" rx="2" fill="#0C8E3F" />
+                        <path d="M5 10L8.5 13.5L15 6.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <rect x="0.5" y="0.5" width="19" height="19" rx="1.5" stroke="#966503" />
+                      </svg>
+                    )}
+                  </div>
+                  <span
+                    className="font-mulish"
+                    style={{ fontSize: '16px', lineHeight: '20px', color: item.completed ? '#0C8E3F' : '#966503' }}
+                  >
+                    {item.label}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 

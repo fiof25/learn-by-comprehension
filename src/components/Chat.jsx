@@ -140,7 +140,7 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentSta
       <div className="flex justify-end px-6 py-2">
         <button
           onClick={onFinish}
-          className="bg-white border border-black/35 rounded flex items-center gap-3 text-sm font-mulish text-black hover:bg-gray-50 transition-colors"
+          className="bg-[#e6f4ea] border border-[#0c8e3f]/30 rounded flex items-center gap-3 text-sm font-mulish text-[#0c8e3f] hover:bg-[#d4edda] transition-colors"
           style={{ padding: '8px 16px', height: '36px', lineHeight: '18px' }}
         >
           Finish conversation
