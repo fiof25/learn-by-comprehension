@@ -25,7 +25,7 @@ const Sidebar = () => {
       <div className="mt-auto">
         <div className="w-12 h-12 rounded-full border-2 border-white/50 overflow-hidden bg-white/20 p-0.5">
           <div className="w-full h-full rounded-full overflow-hidden bg-blue-100">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Fiona" />
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Chris" />
           </div>
         </div>
       </div>

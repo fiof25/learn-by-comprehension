@@ -45,14 +45,16 @@ function App() {
         {
           role: 'assistant',
           character: 'jamie',
-          content: "Wait—I kept thinking crops and ranchers! But the question's about forests and non-farming. What did you get, Fiona?",
-          timestamp: new Date()
+          content: "Wait—I kept thinking crops and ranchers! But the question's about forests and non-farming. What did you get, Chris?",
+          timestamp: new Date(),
+          status: agentState.jamie.status
         },
         {
           role: 'assistant',
           character: 'thomas',
-          content: "I don't have strong evidence yet. Fiona, what did the reading say we should use?",
-          timestamp: new Date()
+          content: "I don't have strong evidence yet. Chris, what did the reading say we should use?",
+          timestamp: new Date(),
+          status: agentState.thomas.status
         }
       ]);
     }
@@ -93,11 +95,13 @@ function App() {
       }).then(res => res.json());
 
       if (response.responses) {
+        const updatedState = response.updatedState || agentState;
         const newMsgs = response.responses.map(r => ({
           role: 'assistant',
           character: r.character,
           content: r.message,
-          timestamp: new Date()
+          timestamp: new Date(),
+          status: updatedState[r.character]?.status
         }));
 
         setMessages(prev => [...prev, ...newMsgs]);

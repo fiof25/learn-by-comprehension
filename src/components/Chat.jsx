@@ -2,9 +2,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Send, Check } from 'lucide-react';
 
 const statusBadge = {
-  RED: { symbol: '?', bg: '#DC2626', text: '#fff' },
-  YELLOW: { symbol: '~', bg: '#D97706', text: '#fff' },
-  GREEN: { symbol: '!', bg: '#16A34A', text: '#fff' },
+  RED: { symbol: '?', color: '#DC2626' },
+  YELLOW: { symbol: '~', color: '#D97706' },
+  GREEN: { symbol: '!', color: '#16A34A' },
 };
 
 const statusTooltip = {
@@ -88,17 +88,16 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentSta
                   alt={msg.character}
                   className="w-full h-full object-cover"
                 />
-                {agentState?.[msg.character]?.status && statusBadge[agentState[msg.character].status] && (
+                {msg.status && statusBadge[msg.status] && (
                   <span
-                    className="absolute top-[2px] left-0 w-4 h-4 rounded-full flex items-center justify-center font-bold text-[11px] leading-none shadow-sm"
+                    className={`absolute top-0 font-bold text-[17px] leading-none ${msg.character === 'jamie' ? 'left-[4px]' : 'left-[8px]'}`}
                     style={{
-                      background: statusBadge[agentState[msg.character].status].bg,
-                      color: statusBadge[agentState[msg.character].status].text,
-                      opacity: 0.5,
+                      color: statusBadge[msg.status].color,
+                      opacity: 0.7,
                       transform: 'rotate(-10deg)',
                     }}
                   >
-                    {statusBadge[agentState[msg.character].status].symbol}
+                    {statusBadge[msg.status].symbol}
                   </span>
                 )}
               </div>
@@ -148,11 +147,10 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentSta
                     />
                     {badge && (
                       <span
-                        className="absolute top-[2px] left-0 w-4 h-4 rounded-full flex items-center justify-center font-bold text-[11px] leading-none shadow-sm"
+                        className="absolute top-0 left-[8px] font-bold text-[17px] leading-none"
                         style={{
-                          background: badge.bg,
-                          color: badge.text,
-                          opacity: 0.5,
+                          color: badge.color,
+                          opacity: 0.7,
                           transform: 'rotate(-10deg)',
                         }}
                       >

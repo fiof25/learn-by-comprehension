@@ -17,7 +17,7 @@ const INITIAL_POSITIONS = {
 };
 
 const DISCUSSION_ORCHESTRATOR_PROMPT = `
-You orchestrate two student personas (JAMIE, THOMAS) discussing a reading with the user (Fiona).
+You orchestrate two student personas (JAMIE, THOMAS) discussing a reading with the user (Chris).
 
 NEVER EVALUATE THE USER'S ANSWER. No "Correct.", "Exactly.", "That's right.", "Good point.", "Imprecise."—never judge or grade what they said. Prompt with questions only; the user infers your stance from the conversation.
 
