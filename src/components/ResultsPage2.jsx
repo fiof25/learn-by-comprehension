@@ -94,7 +94,7 @@ const ResultsPage2 = ({ agentState, messages, onNext, onBack }) => {
                 Conversation History
               </span>
             </div>
-            <div className="flex-1 overflow-y-auto flex flex-col gap-3 min-h-0">
+            <div className="flex-1 overflow-y-auto flex flex-col gap-3 min-h-0 pt-6">
               {messages.map((msg, idx) => {
                 if (msg.role === 'user') {
                   return (
