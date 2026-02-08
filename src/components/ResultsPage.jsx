@@ -143,9 +143,9 @@ const ResultsPage = ({ answer, grades, onNext }) => {
           <button
             onClick={onNext}
             className="bg-[#0C8E3F] rounded flex items-center justify-center gap-4 text-white font-mulish hover:bg-[#0a7534] transition-colors"
-            style={{ padding: '10px 20px', width: 180, height: 40, fontSize: 14, lineHeight: '18px' }}
+            style={{ padding: '10px 20px', width: 224, height: 40, fontSize: 14, lineHeight: '18px' }}
           >
-            Next
+            View Agent Results
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>

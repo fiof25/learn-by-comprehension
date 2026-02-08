@@ -150,7 +150,7 @@ function App() {
       return <LoadingScreen />;
     }
     if (activeStep === 'questionSelect') {
-      return <QuestionSelectionView onQuestionSelect={() => setActiveStep('question')} />;
+      return <QuestionSelectionView onQuestionSelect={() => setActiveStep('question')} onBack={() => setActiveStep('home')} />;
     }
 
     if (activeStep === 'results' && resultsData) {

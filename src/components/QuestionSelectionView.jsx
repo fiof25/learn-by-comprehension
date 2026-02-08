@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowLeft } from 'lucide-react';
 
 const fileInfo = {
   title: 'Drought on the Prairies',
@@ -21,9 +22,19 @@ const questions = [
   },
 ];
 
-const QuestionSelectionView = ({ onQuestionSelect }) => {
+const QuestionSelectionView = ({ onQuestionSelect, onBack }) => {
   return (
-    <div className="flex-1 flex gap-6 p-6 overflow-hidden" style={{ height: 'calc(100vh - 52px)' }}>
+    <div className="flex-1 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 52px)' }}>
+      <div className="bg-white border-b border-black/35 px-6 py-2.5 flex items-center justify-between shrink-0" style={{ gap: '64px' }}>
+        <button
+          onClick={onBack}
+          className="flex items-center gap-3 text-sm font-mulish text-black hover:text-gray-700 transition-colors"
+        >
+          <ArrowLeft className="w-6 h-6 text-[#374957]" />
+          Back to home
+        </button>
+      </div>
+      <div className="flex-1 flex gap-6 p-6 overflow-hidden">
         {/* Left panel - file info */}
         <div className="w-[523px] bg-white rounded p-9 flex flex-col gap-8 shrink-0 overflow-y-auto">
           <div className="flex flex-col gap-2">
@@ -94,6 +105,7 @@ const QuestionSelectionView = ({ onQuestionSelect }) => {
             ))}
           </div>
         </div>
+      </div>
     </div>
   );
 };
