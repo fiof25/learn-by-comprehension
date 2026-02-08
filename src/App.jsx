@@ -5,6 +5,7 @@ import QuestionSection from './components/QuestionSection';
 import HomePage from './components/HomePage';
 import LoadingScreen from './components/LoadingScreen';
 import QuestionSelectionView from './components/QuestionSelectionView';
+import ResultsPage from './components/ResultsPage';
 
 const StarIcon = () => (
   <svg viewBox="0 0 32 32" className="w-8 h-[30px]">
@@ -16,9 +17,10 @@ const StarIcon = () => (
 );
 
 function App() {
-  const [activeStep, setActiveStep] = useState('home'); // 'home' | 'loading' | 'questionSelect' | 'question'
+  const [activeStep, setActiveStep] = useState('home'); // 'home' | 'loading' | 'questionSelect' | 'question' | 'results'
   const [showFinishModal, setShowFinishModal] = useState(false);
   const [prefillAnswer, setPrefillAnswer] = useState('');
+  const [resultsData, setResultsData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [isJamieTyping, setIsJamieTyping] = useState(false);
   const [isThomasTyping, setIsThomasTyping] = useState(false);
@@ -150,6 +152,37 @@ function App() {
       return <QuestionSelectionView onQuestionSelect={() => setActiveStep('question')} />;
     }
 
+    if (activeStep === 'results' && resultsData) {
+      return (
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Secondary Nav Bar */}
+          <div className="bg-white border-b border-black/35 px-6 py-2.5 flex items-center justify-between shrink-0" style={{ gap: '64px' }}>
+            <button
+              onClick={() => setActiveStep('questionSelect')}
+              className="flex items-center gap-3 text-sm font-mulish text-black hover:text-gray-700 transition-colors"
+            >
+              <ArrowLeft className="w-6 h-6 text-[#374957]" />
+              Back to home
+            </button>
+            <div className="flex items-center gap-5 bg-[#efefef] rounded px-2.5 py-1.5 flex-1 max-w-[700px]">
+              <span className="text-xs font-mulish text-black/75">Whiteboard activity</span>
+              <span className="text-xs font-mulish text-black/75">Question 1 of 3</span>
+            </div>
+            <button className="flex items-center gap-3 text-sm font-mulish text-black cursor-default">
+              Skip Question
+              <ArrowLeft className="w-6 h-6 text-[#374957] rotate-180" />
+            </button>
+          </div>
+          <ResultsPage
+            answer={resultsData.answer}
+            grades={resultsData.grades}
+            onNext={() => setActiveStep('questionSelect')}
+            onBack={() => setActiveStep('questionSelect')}
+          />
+        </div>
+      );
+    }
+
     // Question/discussion step - new two-column layout
     return (
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -267,7 +300,13 @@ function App() {
 
         {/* Finish conversation modal */}
         {showFinishModal && (
-          <QuestionSection onClose={() => { setShowFinishModal(false); setPrefillAnswer(''); }} agentState={agentState} prefillAnswer={prefillAnswer} checklist={checklist} />
+          <QuestionSection
+            onClose={() => { setShowFinishModal(false); setPrefillAnswer(''); }}
+            agentState={agentState}
+            prefillAnswer={prefillAnswer}
+            checklist={checklist}
+            onResults={(data) => { setResultsData(data); setShowFinishModal(false); setActiveStep('results'); }}
+          />
         )}
       </div>
     );

@@ -15,29 +15,55 @@ export default async function handler(req, res) {
     }
 
     try {
-        const prompt = `Feedback on a student reflection. Source: "[TRANSCRIPT OMITTED FOR SPEED]"
-Question: "How did the drought affect forests and non-farming communities across Canada?"
-Model themes: wildfires (tinder-dry, scale), impact on towns/rural/First Nations; air quality + health risks; Eastern Newfoundland, bans/evacuations.
-Important: The correct figure for hectares burned is 6.5 million (not 6.8 million). When evaluating "scale", accept answers that mention the scale of wildfires; if the student gives a number, 6.5 million hectares is correct—if they say 6.8 million or another wrong number, still count scale as present but in feedbackDesc you may gently correct to 6.5 million.
-Student answer: "${answer}"
-If they address 5+ of these themes (forests e.g. wildfires, scale, impact on communities, air quality, health, Newfoundland, evacuations/bans), isCorrect: true. Below 5 themes = isCorrect: false. Be lenient on wording but count themes clearly present.
-Respond ONLY with valid JSON: {"isCorrect": true or false, "feedbackTitle": "string", "feedbackDesc": "string (if wrong give hint not answer; if they used wrong hectare number, correct to 6.5 million)"}`;
+        const prompt = `Grade this response to: "How did the drought affect forests and non-farming communities across Canada?"
+
+Key themes (7): wildfires, scale (6.5M hectares), First Nations/community impact, air quality, health risks, Eastern Newfoundland, bans/evacuations.
+
+Response: "${answer}"
+
+Score 0-100 on 4 dimensions. Write feedback in second person ("you"), keep it to one short encouraging sentence. Be supportive—acknowledge what was done well, and gently suggest what could be improved or explored further (e.g. "Try exploring themes like wildfires or air quality" instead of "You failed to address any themes").
+
+1. Content: Theme coverage. 0 themes=0-15, 1-2=15-35, 3-4=35-60, 5-6=60-85, 7=85-100.
+2. Understanding: Clarity, coherence, depth beyond listing facts.
+3. Connections: Cause-effect links (drought→wildfires→air quality→health→displacement).
+4. Evidence: Specific numbers, places, or details from the text. If 6.8M is cited, note correction to 6.5M.
+
+Respond ONLY with valid JSON:
+{
+  "content": {"score": number, "feedback": "short sentence"},
+  "understanding": {"score": number, "feedback": "short sentence"},
+  "connections": {"score": number, "feedback": "short sentence"},
+  "evidence": {"score": number, "feedback": "short sentence"}
+}`;
 
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
 
         const cleanedJson = responseText.replace(/```json|```/g, '').trim();
-        const feedback = JSON.parse(cleanedJson);
+        const grades = JSON.parse(cleanedJson);
 
-        res.json(feedback);
+        res.json(grades);
     } catch (error) {
-        console.error('Error checking answer with Gemini:', error);
-        const keywords = ['wildfire', 'forest', 'air quality', 'evacuat', 'health', '6.5 million', 'newfoundland', 'non-farming', 'communities'];
-        const isCorrect = keywords.some(k => answer.toLowerCase().includes(k));
+        console.error('Error grading answer with Gemini:', error);
+        // Fallback scoring based on keywords
+        const lower = answer.toLowerCase();
+        const keywords = {
+            content: ['wildfire', 'forest', 'air quality', 'evacuat', 'health', 'newfoundland', 'communities', 'first nations', 'bans'],
+            evidence: ['6.5 million', '6.8 million', 'hectare', 'newfoundland', 'first nations', 'pregnant', 'children'],
+        };
+        const contentHits = keywords.content.filter(k => lower.includes(k)).length;
+        const evidenceHits = keywords.evidence.filter(k => lower.includes(k)).length;
+        const contentScore = Math.min(100, Math.round((contentHits / 7) * 100));
+        const evidenceScore = Math.min(100, Math.round((evidenceHits / 5) * 100));
+        const wordCount = answer.split(/\s+/).length;
+        const understandingScore = Math.min(100, Math.round(Math.min(wordCount / 50, 1) * 70 + 10));
+        const connectionsScore = Math.min(100, Math.round((contentHits / 7) * 60 + 10));
+
         res.json({
-            isCorrect: isCorrect,
-            feedbackTitle: isCorrect ? "Analysis Complete" : "Incomplete Reflection",
-            feedbackDesc: isCorrect ? "The reflection identifies key effects from the reading on forests and non-farming communities." : "The current response does not fully address how the drought affected forests and non-farming communities as described in the reading. Review the passage for evidence on wildfires, air quality, health risks, and impacts on communities (e.g. evacuations)."
+            content: { score: contentScore, feedback: `${contentHits} of 7 key themes identified.` },
+            understanding: { score: understandingScore, feedback: 'Based on response length and structure.' },
+            connections: { score: connectionsScore, feedback: 'Consider linking cause and effect more explicitly.' },
+            evidence: { score: evidenceScore, feedback: `${evidenceHits} specific details from the text cited.` },
         });
     }
 }
