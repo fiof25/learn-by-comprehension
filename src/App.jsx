@@ -253,9 +253,9 @@ function App() {
             {/* PDF viewer */}
             <div className="flex-1 min-h-0 bg-[#525659]">
               <iframe
-                src="/assets/Drought_Reading.pdf"
+                src="/assets/Drought_Reading.pdf#toolbar=0&navpanes=0&view=FitH"
                 title="Drought Reading"
-                className="w-full h-full"
+                className="w-full h-full border-none"
               />
             </div>
           </div>
