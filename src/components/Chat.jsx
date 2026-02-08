@@ -94,7 +94,9 @@ const Chat = ({ messages, onSendMessage, isJamieTyping, isThomasTyping, agentSta
             <div className={`rounded font-mulish ${
               msg.role === 'user'
                 ? 'bg-[#fafafa] border border-[#d7d7d7] text-black'
-                : 'bg-[#f5f9ff] border border-[#c2d5f2] text-black'
+                : msg.character === 'jamie'
+                  ? 'bg-[#FDF2F8] border border-[#f0d5e8] text-black'
+                  : 'bg-[#f5f9ff] border border-[#c2d5f2] text-black'
             }`} style={{
               padding: '10px 14px',
               fontSize: '14px',
