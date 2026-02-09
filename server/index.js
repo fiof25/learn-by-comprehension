@@ -38,7 +38,9 @@ app.post('/api/chat', async (req, res) => {
     }
 
     try {
-        const historyText = messages.map(m => {
+        // Send last 12 messages to keep prompt small; agent state carries context forward
+        const recentMessages = messages.slice(-12);
+        const historyText = recentMessages.map(m => {
             const role = m.role === 'user' ? 'User' : (m.character?.toUpperCase() || 'Assistant');
             return `${role}: ${m.content}`;
         }).join('\n');
