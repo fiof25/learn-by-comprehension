@@ -48,14 +48,14 @@ function App() {
         {
           role: 'assistant',
           character: 'jamie',
-          content: "Wait—I kept thinking crops and ranchers! But the question's about forests and non-farming. What did you get, Chris?",
+          content: "Hi! Thanks so much for helping us! I keep thinking about the poor dehydrated crops... but Thomas keeps shutting it down.",
           timestamp: new Date(),
           status: agentState.jamie.status
         },
         {
           role: 'assistant',
           character: 'thomas',
-          content: "I don't have strong evidence yet. Chris, what did the reading say we should use?",
+          content: "Jamie keeps mentioning farms, but I don't think that's relevant. I need some strong evidence. What did the reading say?",
           timestamp: new Date(),
           status: agentState.thomas.status
         }
@@ -244,15 +244,10 @@ function App() {
             {/* Question info header */}
             <div className="p-6 border-b border-black/35 flex gap-4">
               <div className="flex-1 flex flex-col gap-[11px]">
-                <h2 className="font-medium font-karla text-black" style={{ fontSize: '19.5px', lineHeight: '24px' }}>Help clarify Thomas and Jamie&apos;s questions</h2>
-                <p className="font-mulish text-black/75" style={{ fontSize: '12px', lineHeight: '16px' }}>
-                  Click on finish conversation or hover over your message once you are confident that you have the right answer.
-                </p>
                 <div className="bg-[#fafafa] border border-[#d7d7d7] rounded" style={{ padding: '12px 14px' }}>
-                  <p className="font-semibold font-mulish text-black" style={{ fontSize: '14px', lineHeight: '18px', letterSpacing: '0.02em' }}>
-                    How did the drought affect forests and non-farming communities across Canada?
-                  </p>
+                  <h2 className="font-semibold font-karla text-black" style={{ fontSize: '19px', lineHeight: '26px' }}>&ldquo;How did the drought affect forests and non-farming communities across Canada?&rdquo;</h2>
                 </div>
+                <p className="font-mulish text-black/60" style={{ fontSize: '13px', lineHeight: '18px' }}>Thomas and Jamie have different stances on this question. Try to clarify their concerns and develop your final answer.</p>
               </div>
               {/* Learning checklist */}
               <div className="min-w-[220px] border border-black/35 rounded p-3 shrink-0 self-stretch flex flex-col gap-3">

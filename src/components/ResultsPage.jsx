@@ -70,7 +70,7 @@ const ResultsPage = ({ answer, grades, onNext }) => {
       <div className="w-full max-w-[987px] flex flex-col gap-4 h-full">
         {/* Header */}
         <h1 className="font-karla font-semibold text-black shrink-0" style={{ fontSize: '22px', lineHeight: '28px' }}>
-          Well done Chris! You've completed this activity.
+          Well done! You've completed this activity.
         </h1>
 
         {/* Final answer box */}
